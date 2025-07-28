@@ -1,0 +1,3102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Carlos Ballon-Salcedo">
+
+<title>ENDES_TBM_2019</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="ENDES_DBM_children_files/libs/clipboard/clipboard.min.js"></script>
+<script src="ENDES_DBM_children_files/libs/quarto-html/quarto.js"></script>
+<script src="ENDES_DBM_children_files/libs/quarto-html/popper.min.js"></script>
+<script src="ENDES_DBM_children_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="ENDES_DBM_children_files/libs/quarto-html/anchor.min.js"></script>
+<link href="ENDES_DBM_children_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="ENDES_DBM_children_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="ENDES_DBM_children_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="ENDES_DBM_children_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="ENDES_DBM_children_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="ENDES_DBM_children_files/libs/tabwid-1.1.3/tabwid.css" rel="stylesheet">
+
+<script src="ENDES_DBM_children_files/libs/tabwid-1.1.3/tabwid.js"></script>
+
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">ENDES_TBM_2019</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Carlos Ballon-Salcedo </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="load-packages" class="level1">
+<h1>Load packages</h1>
+</section>
+<section id="import-data" class="level1">
+<h1>Import data</h1>
+</section>
+<section id="process-data" class="level1">
+<h1>Process data</h1>
+<section id="variable-selection" class="level2">
+<h2 class="anchored" data-anchor-id="variable-selection">Variable selection</h2>
+</section>
+<section id="dictionary-recode-relevel-and-relabel-variables" class="level2">
+<h2 class="anchored" data-anchor-id="dictionary-recode-relevel-and-relabel-variables">Dictionary: Recode, relevel, and relabel variables</h2>
+</section>
+<section id="exploratory-data-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="exploratory-data-analysis">Exploratory Data Analysis</h2>
+<section id="categorical-data" class="level3">
+<h3 class="anchored" data-anchor-id="categorical-data">Categorical data</h3>
+<section id="missing-unique-and-frequency-analysis-without-weighting" class="level4">
+<h4 class="anchored" data-anchor-id="missing-unique-and-frequency-analysis-without-weighting">Missing, unique, and frequency analysis without weighting</h4>
+</section>
+<section id="descriptive-analysis-measures-of-frequency-and-proportions" class="level4">
+<h4 class="anchored" data-anchor-id="descriptive-analysis-measures-of-frequency-and-proportions">Descriptive analysis: Measures of frequency and proportions</h4>
+<div class="cell">
+<div class="cell-output-display">
+<div class="tabwid"><style>.cl-39f07356{}.cl-39e6b76c{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-39ea2abe{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-39ea480a{width:1.839in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39ea480b{width:1.5in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39ea4814{width:1.415in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39ea481e{width:1.839in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39ea481f{width:1.5in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39ea4828{width:1.415in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39ea4829{width:1.839in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39ea4832{width:1.5in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-39ea4833{width:1.415in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-39f07356"><thead><tr style="overflow-wrap:break-word;"><th class="cl-39ea480a"><p class="cl-39ea2abe"><span class="cl-39e6b76c">area_residencia_factor</span></p></th><th class="cl-39ea480b"><p class="cl-39ea2abe"><span class="cl-39e6b76c">No</span></p></th><th class="cl-39ea4814"><p class="cl-39ea2abe"><span class="cl-39e6b76c">Si</span></p></th><th class="cl-39ea4814"><p class="cl-39ea2abe"><span class="cl-39e6b76c">NA_</span></p></th><th class="cl-39ea480b"><p class="cl-39ea2abe"><span class="cl-39e6b76c">Total</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-39ea481e"><p class="cl-39ea2abe"><span class="cl-39e6b76c">Urbano</span></p></td><td class="cl-39ea481f"><p class="cl-39ea2abe"><span class="cl-39e6b76c">79,826  (74.8%)</span></p></td><td class="cl-39ea4828"><p class="cl-39ea2abe"><span class="cl-39e6b76c">5,029  (39.3%)</span></p></td><td class="cl-39ea4828"><p class="cl-39ea2abe"><span class="cl-39e6b76c">41,054  (60.5%)</span></p></td><td class="cl-39ea481f"><p class="cl-39ea2abe"><span class="cl-39e6b76c">125,909  (67.2%)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-39ea481e"><p class="cl-39ea2abe"><span class="cl-39e6b76c">Rural</span></p></td><td class="cl-39ea481f"><p class="cl-39ea2abe"><span class="cl-39e6b76c">26,880  (25.2%)</span></p></td><td class="cl-39ea4828"><p class="cl-39ea2abe"><span class="cl-39e6b76c">7,754  (60.7%)</span></p></td><td class="cl-39ea4828"><p class="cl-39ea2abe"><span class="cl-39e6b76c">26,838  (39.5%)</span></p></td><td class="cl-39ea481f"><p class="cl-39ea2abe"><span class="cl-39e6b76c">61,472  (32.8%)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-39ea4829"><p class="cl-39ea2abe"><span class="cl-39e6b76c">Total</span></p></td><td class="cl-39ea4832"><p class="cl-39ea2abe"><span class="cl-39e6b76c">106,706 (100.0%)</span></p></td><td class="cl-39ea4833"><p class="cl-39ea2abe"><span class="cl-39e6b76c">12,783 (100.0%)</span></p></td><td class="cl-39ea4833"><p class="cl-39ea2abe"><span class="cl-39e6b76c">67,892 (100.0%)</span></p></td><td class="cl-39ea4832"><p class="cl-39ea2abe"><span class="cl-39e6b76c">187,381 (100.0%)</span></p></td></tr></tbody></table></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+ area_residencia_factor               No              Si             NA_
+                 Urbano  79,826  (74.8%)  5,029  (39.3%) 41,054  (60.5%)
+                  Rural  26,880  (25.2%)  7,754  (60.7%) 26,838  (39.5%)
+                  Total 106,706 (100.0%) 12,783 (100.0%) 67,892 (100.0%)
+            Total
+ 125,909  (67.2%)
+  61,472  (32.8%)
+ 187,381 (100.0%)
+
+[[2]]
+ sexo_child_factor               No              Si             NA_
+         Masculino  52,864  (49.5%)  7,384  (57.8%) 35,527  (52.3%)
+          Femenino  53,842  (50.5%)  5,399  (42.2%) 32,365  (47.7%)
+             Total 106,706 (100.0%) 12,783 (100.0%) 67,892 (100.0%)
+            Total
+  95,775  (51.1%)
+  91,606  (48.9%)
+ 187,381 (100.0%)
+
+[[3]]
+ education_factor               No              Si             NA_
+    Sin educación   1,265   (1.2%)    658   (5.1%)  1,671   (2.5%)
+         Primaria  17,924  (16.8%)  5,349  (41.8%) 17,625  (26.0%)
+       Secundaria  67,683  (63.4%)  6,014  (47.0%) 41,012  (60.4%)
+         Superior  16,360  (15.3%)    411   (3.2%)  5,901   (8.7%)
+             &lt;NA&gt;   3,474   (3.3%)    351   (2.7%)  1,683   (2.5%)
+            Total 106,706 (100.0%) 12,783 (100.0%) 67,892 (100.0%)
+            Total
+   3,594   (1.9%)
+  40,898  (21.8%)
+ 114,709  (61.2%)
+  22,672  (12.1%)
+   5,508   (2.9%)
+ 187,381 (100.0%)
+
+[[4]]
+ edad_meses_cat_factor               No              Si             NA_
+            &lt; 12 meses   6,681   (6.3%)  1,592  (12.5%) 11,420  (16.8%)
+         12 a 23 meses  16,296  (15.3%)  4,507  (35.3%) 19,437  (28.6%)
+         24 a 35 meses  24,847  (23.3%)  2,868  (22.4%) 14,013  (20.6%)
+         36 a 59 meses  58,882  (55.2%)  3,816  (29.9%) 23,022  (33.9%)
+                 Total 106,706 (100.0%) 12,783 (100.0%) 67,892 (100.0%)
+            Total
+  19,693  (10.5%)
+  40,240  (21.5%)
+  41,728  (22.3%)
+  85,720  (45.7%)
+ 187,381 (100.0%)
+
+[[5]]
+  year               No              Si             NA_            Total
+  2011   4,175   (3.9%)    797   (6.2%)  3,197   (4.7%)   8,169   (4.4%)
+  2012   4,494   (4.2%)    798   (6.2%)  3,338   (4.9%)   8,630   (4.6%)
+  2013   4,079   (3.8%)    769   (6.0%)  3,233   (4.8%)   8,081   (4.3%)
+  2014   4,382   (4.1%)    795   (6.2%)  3,389   (5.0%)   8,566   (4.6%)
+  2015  12,268  (11.5%)  1,567  (12.3%)  8,092  (11.9%)  21,927  (11.7%)
+  2016  11,028  (10.3%)  1,344  (10.5%)  7,256  (10.7%)  19,628  (10.5%)
+  2017  11,082  (10.4%)  1,235   (9.7%)  7,314  (10.8%)  19,631  (10.5%)
+  2018  12,310  (11.5%)  1,316  (10.3%)  7,781  (11.5%)  21,407  (11.4%)
+  2019  11,837  (11.1%)  1,089   (8.5%)  6,565   (9.7%)  19,491  (10.4%)
+  2020   7,269   (6.8%)    655   (5.1%)  3,848   (5.7%)  11,772   (6.3%)
+  2021  12,405  (11.6%)  1,121   (8.8%)  6,737   (9.9%)  20,263  (10.8%)
+  2022  11,377  (10.7%)  1,297  (10.1%)  7,142  (10.5%)  19,816  (10.6%)
+ Total 106,706 (100.0%) 12,783 (100.0%) 67,892 (100.0%) 187,381 (100.0%)
+
+[[6]]
+ stunting               No              Si             NA_            Total
+       No 106,706 (100.0%)      0   (0.0%) 51,811  (76.3%) 158,517  (84.6%)
+       Si       0   (0.0%) 12,783 (100.0%) 15,566  (22.9%)  28,349  (15.1%)
+     &lt;NA&gt;       0   (0.0%)      0   (0.0%)    515   (0.8%)     515   (0.3%)
+    Total 106,706 (100.0%) 12,783 (100.0%) 67,892 (100.0%) 187,381 (100.0%)
+
+[[7]]
+ wasting               No              Si             NA_            Total
+      No 106,363  (99.7%) 12,574  (98.4%) 66,946  (98.6%) 185,883  (99.2%)
+      Si     343   (0.3%)    209   (1.6%)    431   (0.6%)     983   (0.5%)
+    &lt;NA&gt;       0   (0.0%)      0   (0.0%)    515   (0.8%)     515   (0.3%)
+   Total 106,706 (100.0%) 12,783 (100.0%) 67,892 (100.0%) 187,381 (100.0%)
+
+[[8]]
+ thinness               No              Si             NA_            Total
+       No 106,241  (99.6%) 10,297  (80.6%) 64,427  (94.9%) 180,965  (96.6%)
+       Si     465   (0.4%)  2,486  (19.4%)  2,950   (4.3%)   5,901   (3.1%)
+     &lt;NA&gt;       0   (0.0%)      0   (0.0%)    515   (0.8%)     515   (0.3%)
+    Total 106,706 (100.0%) 12,783 (100.0%) 67,892 (100.0%) 187,381 (100.0%)
+
+[[9]]
+ exceso_peso               No              Si             NA_            Total
+          No  69,249  (64.9%) 10,011  (78.3%) 47,053  (69.3%) 126,313  (67.4%)
+          Si  37,457  (35.1%)  2,772  (21.7%) 20,835  (30.7%)  61,064  (32.6%)
+        &lt;NA&gt;       0   (0.0%)      0   (0.0%)      4   (0.0%)       4   (0.0%)
+       Total 106,706 (100.0%) 12,783 (100.0%) 67,892 (100.0%) 187,381 (100.0%)
+
+[[10]]
+ anemia_child_factor               No              Si             NA_
+                  No 106,706 (100.0%)      0   (0.0%) 15,997  (23.6%)
+                  Si       0   (0.0%) 12,783 (100.0%) 51,894  (76.4%)
+                &lt;NA&gt;       0   (0.0%)      0   (0.0%)      1   (0.0%)
+               Total 106,706 (100.0%) 12,783 (100.0%) 67,892 (100.0%)
+            Total
+ 122,703  (65.5%)
+  64,677  (34.5%)
+       1   (0.0%)
+ 187,381 (100.0%)
+
+[[11]]
+ anemia_child_levels_factor               No              Si             NA_
+                 Sin anemia 106,706 (100.0%)      0   (0.0%) 15,997  (23.6%)
+                       Leve       0   (0.0%)  8,225  (64.3%) 35,675  (52.5%)
+                   Moderada       0   (0.0%)  4,396  (34.4%) 15,951  (23.5%)
+                      Grave       0   (0.0%)    162   (1.3%)    268   (0.4%)
+                       &lt;NA&gt;       0   (0.0%)      0   (0.0%)      1   (0.0%)
+                      Total 106,706 (100.0%) 12,783 (100.0%) 67,892 (100.0%)
+            Total
+ 122,703  (65.5%)
+  43,900  (23.4%)
+  20,347  (10.9%)
+     430   (0.2%)
+       1   (0.0%)
+ 187,381 (100.0%)</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+ area_residencia_factor               No           Si             NA_
+                 Urbano  85,855  (70.5%) 269  (58.1%) 39,785  (61.1%)
+                  Rural  35,897  (29.5%) 194  (41.9%) 25,381  (38.9%)
+                  Total 121,752 (100.0%) 463 (100.0%) 65,166 (100.0%)
+            Total
+ 125,909  (67.2%)
+  61,472  (32.8%)
+ 187,381 (100.0%)
+
+[[2]]
+ sexo_child_factor               No           Si             NA_
+         Masculino  60,478  (49.7%) 281  (60.7%) 35,016  (53.7%)
+          Femenino  61,274  (50.3%) 182  (39.3%) 30,150  (46.3%)
+             Total 121,752 (100.0%) 463 (100.0%) 65,166 (100.0%)
+            Total
+  95,775  (51.1%)
+  91,606  (48.9%)
+ 187,381 (100.0%)
+
+[[3]]
+ education_factor               No           Si             NA_
+    Sin educación   2,103   (1.7%)  17   (3.7%)  1,474   (2.3%)
+         Primaria  24,381  (20.0%) 167  (36.1%) 16,350  (25.1%)
+       Secundaria  74,381  (61.1%) 241  (52.1%) 40,087  (61.5%)
+         Superior  16,907  (13.9%)  27   (5.8%)  5,738   (8.8%)
+             &lt;NA&gt;   3,980   (3.3%)  11   (2.4%)  1,517   (2.3%)
+            Total 121,752 (100.0%) 463 (100.0%) 65,166 (100.0%)
+            Total
+   3,594   (1.9%)
+  40,898  (21.8%)
+ 114,709  (61.2%)
+  22,672  (12.1%)
+   5,508   (2.9%)
+ 187,381 (100.0%)
+
+[[4]]
+ edad_meses_cat_factor               No           Si             NA_
+            &lt; 12 meses   7,371   (6.1%)  92  (19.9%) 12,230  (18.8%)
+         12 a 23 meses  19,235  (15.8%) 212  (45.8%) 20,793  (31.9%)
+         24 a 35 meses  28,436  (23.4%)  86  (18.6%) 13,206  (20.3%)
+         36 a 59 meses  66,710  (54.8%)  73  (15.8%) 18,937  (29.1%)
+                 Total 121,752 (100.0%) 463 (100.0%) 65,166 (100.0%)
+            Total
+  19,693  (10.5%)
+  40,240  (21.5%)
+  41,728  (22.3%)
+  85,720  (45.7%)
+ 187,381 (100.0%)
+
+[[5]]
+  year               No           Si             NA_            Total
+  2011   5,347   (4.4%)  18   (3.9%)  2,804   (4.3%)   8,169   (4.4%)
+  2012   5,505   (4.5%)  23   (5.0%)  3,102   (4.8%)   8,630   (4.6%)
+  2013   5,011   (4.1%)  11   (2.4%)  3,059   (4.7%)   8,081   (4.3%)
+  2014   5,155   (4.2%)  25   (5.4%)  3,386   (5.2%)   8,566   (4.6%)
+  2015  14,126  (11.6%)  95  (20.5%)  7,706  (11.8%)  21,927  (11.7%)
+  2016  12,470  (10.2%)  48  (10.4%)  7,110  (10.9%)  19,628  (10.5%)
+  2017  12,502  (10.3%)  49  (10.6%)  7,080  (10.9%)  19,631  (10.5%)
+  2018  13,890  (11.4%)  59  (12.7%)  7,458  (11.4%)  21,407  (11.4%)
+  2019  13,239  (10.9%)  38   (8.2%)  6,214   (9.5%)  19,491  (10.4%)
+  2020   8,155   (6.7%)  22   (4.8%)  3,595   (5.5%)  11,772   (6.3%)
+  2021  13,770  (11.3%)  32   (6.9%)  6,461   (9.9%)  20,263  (10.8%)
+  2022  12,582  (10.3%)  43   (9.3%)  7,191  (11.0%)  19,816  (10.6%)
+ Total 121,752 (100.0%) 463 (100.0%) 65,166 (100.0%) 187,381 (100.0%)
+
+[[6]]
+ stunting               No           Si             NA_            Total
+       No 106,363  (87.4%) 254  (54.9%) 51,900  (79.6%) 158,517  (84.6%)
+       Si  15,389  (12.6%) 209  (45.1%) 12,751  (19.6%)  28,349  (15.1%)
+     &lt;NA&gt;       0   (0.0%)   0   (0.0%)    515   (0.8%)     515   (0.3%)
+    Total 121,752 (100.0%) 463 (100.0%) 65,166 (100.0%) 187,381 (100.0%)
+
+[[7]]
+ wasting               No           Si             NA_            Total
+      No 121,752 (100.0%)   0   (0.0%) 64,131  (98.4%) 185,883  (99.2%)
+      Si       0   (0.0%) 463 (100.0%)    520   (0.8%)     983   (0.5%)
+    &lt;NA&gt;       0   (0.0%)   0   (0.0%)    515   (0.8%)     515   (0.3%)
+   Total 121,752 (100.0%) 463 (100.0%) 65,166 (100.0%) 187,381 (100.0%)
+
+[[8]]
+ thinness               No           Si             NA_            Total
+       No 119,146  (97.9%)  67  (14.5%) 61,752  (94.8%) 180,965  (96.6%)
+       Si   2,606   (2.1%) 396  (85.5%)  2,899   (4.4%)   5,901   (3.1%)
+     &lt;NA&gt;       0   (0.0%)   0   (0.0%)    515   (0.8%)     515   (0.3%)
+    Total 121,752 (100.0%) 463 (100.0%) 65,166 (100.0%) 187,381 (100.0%)
+
+[[9]]
+ exceso_peso               No           Si             NA_            Total
+          No  80,812  (66.4%) 463 (100.0%) 45,038  (69.1%) 126,313  (67.4%)
+          Si  40,940  (33.6%)   0   (0.0%) 20,124  (30.9%)  61,064  (32.6%)
+        &lt;NA&gt;       0   (0.0%)   0   (0.0%)      4   (0.0%)       4   (0.0%)
+       Total 121,752 (100.0%) 463 (100.0%) 65,166 (100.0%) 187,381 (100.0%)
+
+[[10]]
+ anemia_child_factor               No           Si             NA_
+                  No 121,752 (100.0%)   0   (0.0%)    951   (1.5%)
+                  Si       0   (0.0%) 463 (100.0%) 64,214  (98.5%)
+                &lt;NA&gt;       0   (0.0%)   0   (0.0%)      1   (0.0%)
+               Total 121,752 (100.0%) 463 (100.0%) 65,166 (100.0%)
+            Total
+ 122,703  (65.5%)
+  64,677  (34.5%)
+       1   (0.0%)
+ 187,381 (100.0%)
+
+[[11]]
+ anemia_child_levels_factor               No           Si             NA_
+                 Sin anemia 121,752 (100.0%)   0   (0.0%)    951   (1.5%)
+                       Leve       0   (0.0%) 272  (58.7%) 43,628  (66.9%)
+                   Moderada       0   (0.0%) 178  (38.4%) 20,169  (31.0%)
+                      Grave       0   (0.0%)  13   (2.8%)    417   (0.6%)
+                       &lt;NA&gt;       0   (0.0%)   0   (0.0%)      1   (0.0%)
+                      Total 121,752 (100.0%) 463 (100.0%) 65,166 (100.0%)
+            Total
+ 122,703  (65.5%)
+  43,900  (23.4%)
+  20,347  (10.9%)
+     430   (0.2%)
+       1   (0.0%)
+ 187,381 (100.0%)</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+ area_residencia_factor               No             Si             NA_
+                 Urbano  84,847  (71.1%) 1,200  (41.3%) 39,862  (61.1%)
+                  Rural  34,428  (28.9%) 1,704  (58.7%) 25,340  (38.9%)
+                  Total 119,275 (100.0%) 2,904 (100.0%) 65,202 (100.0%)
+            Total
+ 125,909  (67.2%)
+  61,472  (32.8%)
+ 187,381 (100.0%)
+
+[[2]]
+ sexo_child_factor               No             Si             NA_
+         Masculino  59,287  (49.7%) 1,675  (57.7%) 34,813  (53.4%)
+          Femenino  59,988  (50.3%) 1,229  (42.3%) 30,389  (46.6%)
+             Total 119,275 (100.0%) 2,904 (100.0%) 65,202 (100.0%)
+            Total
+  95,775  (51.1%)
+  91,606  (48.9%)
+ 187,381 (100.0%)
+
+[[3]]
+ education_factor               No             Si             NA_
+    Sin educación   1,957   (1.6%)   154   (5.3%)  1,483   (2.3%)
+         Primaria  23,321  (19.6%) 1,263  (43.5%) 16,314  (25.0%)
+       Secundaria  73,271  (61.4%) 1,326  (45.7%) 40,112  (61.5%)
+         Superior  16,814  (14.1%)    83   (2.9%)  5,775   (8.9%)
+             &lt;NA&gt;   3,912   (3.3%)    78   (2.7%)  1,518   (2.3%)
+            Total 119,275 (100.0%) 2,904 (100.0%) 65,202 (100.0%)
+            Total
+   3,594   (1.9%)
+  40,898  (21.8%)
+ 114,709  (61.2%)
+  22,672  (12.1%)
+   5,508   (2.9%)
+ 187,381 (100.0%)
+
+[[4]]
+ edad_meses_cat_factor               No             Si             NA_
+            &lt; 12 meses   7,253   (6.1%)   438  (15.1%) 12,002  (18.4%)
+         12 a 23 meses  18,689  (15.7%) 1,119  (38.5%) 20,432  (31.3%)
+         24 a 35 meses  27,817  (23.3%)   616  (21.2%) 13,295  (20.4%)
+         36 a 59 meses  65,516  (54.9%)   731  (25.2%) 19,473  (29.9%)
+                 Total 119,275 (100.0%) 2,904 (100.0%) 65,202 (100.0%)
+            Total
+  19,693  (10.5%)
+  40,240  (21.5%)
+  41,728  (22.3%)
+  85,720  (45.7%)
+ 187,381 (100.0%)
+
+[[5]]
+  year               No             Si             NA_            Total
+  2011   5,131   (4.3%)   183   (6.3%)  2,855   (4.4%)   8,169   (4.4%)
+  2012   5,351   (4.5%)   165   (5.7%)  3,114   (4.8%)   8,630   (4.6%)
+  2013   4,852   (4.1%)   170   (5.9%)  3,059   (4.7%)   8,081   (4.3%)
+  2014   5,040   (4.2%)   174   (6.0%)  3,352   (5.1%)   8,566   (4.6%)
+  2015  13,807  (11.6%)   405  (13.9%)  7,715  (11.8%)  21,927  (11.7%)
+  2016  12,226  (10.3%)   356  (12.3%)  7,046  (10.8%)  19,628  (10.5%)
+  2017  12,246  (10.3%)   313  (10.8%)  7,072  (10.8%)  19,631  (10.5%)
+  2018  13,625  (11.4%)   293  (10.1%)  7,489  (11.5%)  21,407  (11.4%)
+  2019  13,017  (10.9%)   220   (7.6%)  6,254   (9.6%)  19,491  (10.4%)
+  2020   8,022   (6.7%)   117   (4.0%)  3,633   (5.6%)  11,772   (6.3%)
+  2021  13,578  (11.4%)   215   (7.4%)  6,470   (9.9%)  20,263  (10.8%)
+  2022  12,380  (10.4%)   293  (10.1%)  7,143  (11.0%)  19,816  (10.6%)
+ Total 119,275 (100.0%) 2,904 (100.0%) 65,202 (100.0%) 187,381 (100.0%)
+
+[[6]]
+ stunting               No             Si             NA_            Total
+       No 106,241  (89.1%)   418  (14.4%) 51,858  (79.5%) 158,517  (84.6%)
+       Si  13,034  (10.9%) 2,486  (85.6%) 12,829  (19.7%)  28,349  (15.1%)
+     &lt;NA&gt;       0   (0.0%)     0   (0.0%)    515   (0.8%)     515   (0.3%)
+    Total 119,275 (100.0%) 2,904 (100.0%) 65,202 (100.0%) 187,381 (100.0%)
+
+[[7]]
+ wasting               No             Si             NA_            Total
+      No 119,146  (99.9%) 2,508  (86.4%) 64,229  (98.5%) 185,883  (99.2%)
+      Si     129   (0.1%)   396  (13.6%)    458   (0.7%)     983   (0.5%)
+    &lt;NA&gt;       0   (0.0%)     0   (0.0%)    515   (0.8%)     515   (0.3%)
+   Total 119,275 (100.0%) 2,904 (100.0%) 65,202 (100.0%) 187,381 (100.0%)
+
+[[8]]
+ thinness               No             Si             NA_            Total
+       No 119,275 (100.0%)     0   (0.0%) 61,690  (94.6%) 180,965  (96.6%)
+       Si       0   (0.0%) 2,904 (100.0%)  2,997   (4.6%)   5,901   (3.1%)
+     &lt;NA&gt;       0   (0.0%)     0   (0.0%)    515   (0.8%)     515   (0.3%)
+    Total 119,275 (100.0%) 2,904 (100.0%) 65,202 (100.0%) 187,381 (100.0%)
+
+[[9]]
+ exceso_peso               No             Si             NA_            Total
+          No  78,364  (65.7%) 2,887  (99.4%) 45,062  (69.1%) 126,313  (67.4%)
+          Si  40,911  (34.3%)    17   (0.6%) 20,136  (30.9%)  61,064  (32.6%)
+        &lt;NA&gt;       0   (0.0%)     0   (0.0%)      4   (0.0%)       4   (0.0%)
+       Total 119,275 (100.0%) 2,904 (100.0%) 65,202 (100.0%) 187,381 (100.0%)
+
+[[10]]
+ anemia_child_factor               No             Si             NA_
+                  No 119,275 (100.0%)     0   (0.0%)  3,428   (5.3%)
+                  Si       0   (0.0%) 2,904 (100.0%) 61,773  (94.7%)
+                &lt;NA&gt;       0   (0.0%)     0   (0.0%)      1   (0.0%)
+               Total 119,275 (100.0%) 2,904 (100.0%) 65,202 (100.0%)
+            Total
+ 122,703  (65.5%)
+  64,677  (34.5%)
+       1   (0.0%)
+ 187,381 (100.0%)
+
+[[11]]
+ anemia_child_levels_factor               No             Si             NA_
+                 Sin anemia 119,275 (100.0%)     0   (0.0%)  3,428   (5.3%)
+                       Leve       0   (0.0%) 1,770  (61.0%) 42,130  (64.6%)
+                   Moderada       0   (0.0%) 1,062  (36.6%) 19,285  (29.6%)
+                      Grave       0   (0.0%)    72   (2.5%)    358   (0.5%)
+                       &lt;NA&gt;       0   (0.0%)     0   (0.0%)      1   (0.0%)
+                      Total 119,275 (100.0%) 2,904 (100.0%) 65,202 (100.0%)
+            Total
+ 122,703  (65.5%)
+  43,900  (23.4%)
+  20,347  (10.9%)
+     430   (0.2%)
+       1   (0.0%)
+ 187,381 (100.0%)</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+ area_residencia_factor              No              Si             NA_
+                 Urbano 54,939  (67.5%) 12,694  (64.5%) 58,276  (67.5%)
+                  Rural 26,393  (32.5%)  7,000  (35.5%) 28,079  (32.5%)
+                  Total 81,332 (100.0%) 19,694 (100.0%) 86,355 (100.0%)
+            Total
+ 125,909  (67.2%)
+  61,472  (32.8%)
+ 187,381 (100.0%)
+
+[[2]]
+ sexo_child_factor              No              Si             NA_
+         Masculino 38,907  (47.8%) 11,057  (56.1%) 45,811  (53.0%)
+          Femenino 42,425  (52.2%)  8,637  (43.9%) 40,544  (47.0%)
+             Total 81,332 (100.0%) 19,694 (100.0%) 86,355 (100.0%)
+            Total
+  95,775  (51.1%)
+  91,606  (48.9%)
+ 187,381 (100.0%)
+
+[[3]]
+ education_factor              No              Si             NA_
+    Sin educación  1,526   (1.9%)    403   (2.0%)  1,665   (1.9%)
+         Primaria 17,775  (21.9%)  4,543  (23.1%) 18,580  (21.5%)
+       Secundaria 49,308  (60.6%) 12,299  (62.5%) 53,102  (61.5%)
+         Superior 10,132  (12.5%)  2,005  (10.2%) 10,535  (12.2%)
+             &lt;NA&gt;  2,591   (3.2%)    444   (2.3%)  2,473   (2.9%)
+            Total 81,332 (100.0%) 19,694 (100.0%) 86,355 (100.0%)
+            Total
+   3,594   (1.9%)
+  40,898  (21.8%)
+ 114,709  (61.2%)
+  22,672  (12.1%)
+   5,508   (2.9%)
+ 187,381 (100.0%)
+
+[[4]]
+ edad_meses_cat_factor              No              Si             NA_
+            &lt; 12 meses  4,544   (5.6%)  4,318  (21.9%) 10,831  (12.5%)
+         12 a 23 meses 12,473  (15.3%)  6,557  (33.3%) 21,210  (24.6%)
+         24 a 35 meses 19,479  (23.9%)  3,679  (18.7%) 18,570  (21.5%)
+         36 a 59 meses 44,836  (55.1%)  5,140  (26.1%) 35,744  (41.4%)
+                 Total 81,332 (100.0%) 19,694 (100.0%) 86,355 (100.0%)
+            Total
+  19,693  (10.5%)
+  40,240  (21.5%)
+  41,728  (22.3%)
+  85,720  (45.7%)
+ 187,381 (100.0%)
+
+[[5]]
+  year              No              Si             NA_            Total
+  2011  3,540   (4.4%)    865   (4.4%)  3,764   (4.4%)   8,169   (4.4%)
+  2012  3,757   (4.6%)    914   (4.6%)  3,959   (4.6%)   8,630   (4.6%)
+  2013  3,357   (4.1%)    993   (5.0%)  3,731   (4.3%)   8,081   (4.3%)
+  2014  3,392   (4.2%)    995   (5.1%)  4,179   (4.8%)   8,566   (4.6%)
+  2015  9,605  (11.8%)  2,260  (11.5%) 10,062  (11.7%)  21,927  (11.7%)
+  2016  8,439  (10.4%)  2,032  (10.3%)  9,157  (10.6%)  19,628  (10.5%)
+  2017  8,385  (10.3%)  1,993  (10.1%)  9,253  (10.7%)  19,631  (10.5%)
+  2018  9,196  (11.3%)  2,397  (12.2%)  9,814  (11.4%)  21,407  (11.4%)
+  2019  8,856  (10.9%)  1,961  (10.0%)  8,674  (10.0%)  19,491  (10.4%)
+  2020  5,376   (6.6%)  1,095   (5.6%)  5,301   (6.1%)  11,772   (6.3%)
+  2021  9,034  (11.1%)  2,041  (10.4%)  9,188  (10.6%)  20,263  (10.8%)
+  2022  8,395  (10.3%)  2,148  (10.9%)  9,273  (10.7%)  19,816  (10.6%)
+ Total 81,332 (100.0%) 19,694 (100.0%) 86,355 (100.0%) 187,381 (100.0%)
+
+[[6]]
+ stunting              No              Si             NA_            Total
+       No 69,249  (85.1%) 16,840  (85.5%) 72,428  (83.9%) 158,517  (84.6%)
+       Si 12,083  (14.9%)  2,772  (14.1%) 13,494  (15.6%)  28,349  (15.1%)
+     &lt;NA&gt;      0   (0.0%)     82   (0.4%)    433   (0.5%)     515   (0.3%)
+    Total 81,332 (100.0%) 19,694 (100.0%) 86,355 (100.0%) 187,381 (100.0%)
+
+[[7]]
+ wasting              No              Si             NA_            Total
+      No 80,812  (99.4%) 19,612  (99.6%) 85,459  (99.0%) 185,883  (99.2%)
+      Si    520   (0.6%)      0   (0.0%)    463   (0.5%)     983   (0.5%)
+    &lt;NA&gt;      0   (0.0%)     82   (0.4%)    433   (0.5%)     515   (0.3%)
+   Total 81,332 (100.0%) 19,694 (100.0%) 86,355 (100.0%) 187,381 (100.0%)
+
+[[8]]
+ thinness              No              Si             NA_            Total
+       No 78,364  (96.4%) 19,595  (99.5%) 83,006  (96.1%) 180,965  (96.6%)
+       Si  2,968   (3.6%)     17   (0.1%)  2,916   (3.4%)   5,901   (3.1%)
+     &lt;NA&gt;      0   (0.0%)     82   (0.4%)    433   (0.5%)     515   (0.3%)
+    Total 81,332 (100.0%) 19,694 (100.0%) 86,355 (100.0%) 187,381 (100.0%)
+
+[[9]]
+ exceso_peso              No              Si             NA_            Total
+          No 81,332 (100.0%)      0   (0.0%) 44,981  (52.1%) 126,313  (67.4%)
+          Si      0   (0.0%) 19,694 (100.0%) 41,370  (47.9%)  61,064  (32.6%)
+        &lt;NA&gt;      0   (0.0%)      0   (0.0%)      4   (0.0%)       4   (0.0%)
+       Total 81,332 (100.0%) 19,694 (100.0%) 86,355 (100.0%) 187,381 (100.0%)
+
+[[10]]
+ anemia_child_factor              No              Si             NA_
+                  No 81,332 (100.0%)      0   (0.0%) 41,371  (47.9%)
+                  Si      0   (0.0%) 19,694 (100.0%) 44,983  (52.1%)
+                &lt;NA&gt;      0   (0.0%)      0   (0.0%)      1   (0.0%)
+               Total 81,332 (100.0%) 19,694 (100.0%) 86,355 (100.0%)
+            Total
+ 122,703  (65.5%)
+  64,677  (34.5%)
+       1   (0.0%)
+ 187,381 (100.0%)
+
+[[11]]
+ anemia_child_levels_factor              No              Si             NA_
+                 Sin anemia 81,332 (100.0%)      0   (0.0%) 41,371  (47.9%)
+                       Leve      0   (0.0%) 13,169  (66.9%) 30,731  (35.6%)
+                   Moderada      0   (0.0%)  6,411  (32.6%) 13,936  (16.1%)
+                      Grave      0   (0.0%)    114   (0.6%)    316   (0.4%)
+                       &lt;NA&gt;      0   (0.0%)      0   (0.0%)      1   (0.0%)
+                      Total 81,332 (100.0%) 19,694 (100.0%) 86,355 (100.0%)
+            Total
+ 122,703  (65.5%)
+  43,900  (23.4%)
+  20,347  (10.9%)
+     430   (0.2%)
+       1   (0.0%)
+ 187,381 (100.0%)</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="numerical-data" class="level3">
+<h3 class="anchored" data-anchor-id="numerical-data">Numerical data</h3>
+<section id="descriptive-statistics-summary-statistics" class="level4">
+<h4 class="anchored" data-anchor-id="descriptive-statistics-summary-statistics">Descriptive statistics: Summary statistics</h4>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+No. of observations = 187381
+
+  Var. name                  obs.   mean   median  s.d.   min.   max.  
+1 edad_meses                 187381 32.96  33      15.49  0      59    
+2 talla_edad                 187007 -0.75  -0.76   1.04   -6     5.88  
+3 talla_edad_oms             186866 -0.92  -0.92   1.05   -6     5.97  
+4 peso_edad                  187007 -0.33  -0.43   1.17   -5.72  6     
+5 peso_edad_oms              186866 -0.15  -0.2    1.06   -5.36  4.98  
+6 peso_talla                 187381 0.42   0.16    4.38   -3.98  99.98 
+7 peso_talla_oms             186866 0.51   0.47    1.01   -4.98  5     
+8 DBM_anemia_stunting_factor 119489 1.107  1       0.309  1      2     </code></pre>
+</div>
+</div>
+</section>
+<section id="descriptive-statistics-grouped-summary-statistics" class="level4">
+<h4 class="anchored" data-anchor-id="descriptive-statistics-grouped-summary-statistics">Descriptive statistics: Grouped summary statistics</h4>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+
+No. of observations = 106706
+
+  Var. name                  obs.   mean   median  s.d.   min.   max.  
+1 edad_meses                 106706 36.55  38      14.59  0      59    
+2 talla_edad                 106668 -0.39  -0.47   0.85   -2.75  5.88  
+3 talla_edad_oms             106706 -0.57  -0.65   0.85   -2     5.94  
+4 peso_edad                  106668 -0.02  -0.13   1.09   -3.79  6     
+5 peso_edad_oms              106706 0.13   0.04    0.97   -3.92  4.98  
+6 peso_talla                 106706 0.4    0.27    1.77   -3.98  99.98 
+7 peso_talla_oms             106706 0.64   0.57    1.02   -4.94  5     
+8 DBM_anemia_stunting_factor                                           
+
+[[2]]
+
+No. of observations = 12783
+
+  Var. name                  obs.  mean   median  s.d.   min.   max.  
+1 edad_meses                 12783 27.56  25      14.26  6      59    
+2 talla_edad                 12779 -2.35  -2.23   0.52   -5.81  -1.41 
+3 talla_edad_oms             12783 -2.58  -2.44   0.53   -6     -2.01 
+4 peso_edad                  12779 -1.68  -1.68   0.69   -4.76  1.11  
+5 peso_edad_oms              12783 -1.42  -1.39   0.74   -5.25  1.33  
+6 peso_talla                 12783 -0.27  -0.31   1.96   -3.92  99.98 
+7 peso_talla_oms             12783 -0.01  0.01    0.9    -4.88  3.75  
+8 DBM_anemia_stunting_factor                                          
+
+[[3]]
+
+No. of observations = 67892
+
+  Var. name                  obs.  mean   median  s.d.   min.   max.  
+1 edad_meses                 67892 28.33  26      15.56  3      59    
+2 talla_edad                 67560 -1.02  -1.03   1      -6     5.07  
+3 talla_edad_oms             67377 -1.17  -1.18   1.05   -5.87  5.97  
+4 peso_edad                  67560 -0.58  -0.68   1.11   -5.72  6     
+5 peso_edad_oms              67377 -0.34  -0.39   1.04   -5.36  4.93  
+6 peso_talla                 67892 0.58   0.06    6.87   -3.97  99.98 
+7 peso_talla_oms             67377 0.42   0.39    0.97   -4.98  4.99  
+8 DBM_anemia_stunting_factor                                          </code></pre>
+</div>
+</div>
+</section>
+<section id="data-visualization-raincloud-plots-and-grouped-summary-statistics" class="level4">
+<h4 class="anchored" data-anchor-id="data-visualization-raincloud-plots-and-grouped-summary-statistics">Data visualization: Raincloud plots and grouped summary statistics</h4>
+<div style="text-align: justify">
+<p>El test de Shapiro-Wilk evalúa la normalidad de un conjunto de datos, pero en muestras grandes pierde utilidad porque detecta desviaciones mínimas como significativas. En la práctica, se recomienda aplicarlo en tamaños de muestra de hasta 5,000 observaciones, ya que más allá de este límite tiende a rechazar la hipótesis de normalidad incluso cuando la distribución es aproximadamente normal. Por otro lado, el test de Anderson-Darling es más sensible a la forma de las colas de la distribución, pero su cálculo es computacionalmente costoso debido al ordenamiento de los datos y la evaluación de una suma ponderada de diferencias. Con muestras masivas, la normalidad suele asumirse debido al Teorema del Límite Central, salvo en presencia de fuerte asimetría o colas pesadas. Para complementar estas pruebas, es recomendable usar histogramas, QQ-plots y métricas como skewness y kurtosis.</p>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ENDES_DBM_children_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ENDES_DBM_children_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1536"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ENDES_DBM_children_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1536"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ENDES_DBM_children_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1536"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+</section>
+<section id="produce-outputs" class="level1">
+<h1>Produce outputs</h1>
+<section id="design" class="level2">
+<h2 class="anchored" data-anchor-id="design">Design</h2>
+</section>
+<section id="table-1-sociodemographic-characteristics-of-peruvian-children" class="level2">
+<h2 class="anchored" data-anchor-id="table-1-sociodemographic-characteristics-of-peruvian-children">Table 1: Sociodemographic characteristics of Peruvian children</h2>
+<p>This is the univariate analysis</p>
+<section id="unweighted-descriptive-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="unweighted-descriptive-analysis">Unweighted descriptive analysis</h3>
+</section>
+<section id="weighted-descriptive-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="weighted-descriptive-analysis">Weighted descriptive analysis</h3>
+<p>Use the <code>show_header_names()</code> to see the column names that can be modified.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="logdphxcda" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#logdphxcda table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#logdphxcda thead, #logdphxcda tbody, #logdphxcda tfoot, #logdphxcda tr, #logdphxcda td, #logdphxcda th {
+  border-style: none;
+}
+
+#logdphxcda p {
+  margin: 0;
+  padding: 0;
+}
+
+#logdphxcda .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#logdphxcda .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#logdphxcda .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#logdphxcda .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#logdphxcda .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#logdphxcda .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#logdphxcda .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#logdphxcda .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#logdphxcda .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#logdphxcda .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#logdphxcda .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#logdphxcda .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#logdphxcda .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#logdphxcda .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#logdphxcda .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#logdphxcda .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#logdphxcda .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#logdphxcda .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#logdphxcda .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#logdphxcda .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#logdphxcda .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#logdphxcda .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#logdphxcda .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#logdphxcda .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#logdphxcda .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#logdphxcda .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#logdphxcda .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#logdphxcda .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#logdphxcda .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#logdphxcda .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#logdphxcda .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#logdphxcda .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#logdphxcda .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#logdphxcda .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#logdphxcda .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#logdphxcda .gt_left {
+  text-align: left;
+}
+
+#logdphxcda .gt_center {
+  text-align: center;
+}
+
+#logdphxcda .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#logdphxcda .gt_font_normal {
+  font-weight: normal;
+}
+
+#logdphxcda .gt_font_bold {
+  font-weight: bold;
+}
+
+#logdphxcda .gt_font_italic {
+  font-style: italic;
+}
+
+#logdphxcda .gt_super {
+  font-size: 65%;
+}
+
+#logdphxcda .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#logdphxcda .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#logdphxcda .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#logdphxcda .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#logdphxcda .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#logdphxcda .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#logdphxcda .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#logdphxcda .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#logdphxcda div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <caption><span data-qmd-base64="VGFibGUgMS4gU29jaW9kZW1vZ3JhcGhpYyBjaGFyYWN0ZXJpc3RpY3Mgb2YgUGVydXZpYW4gY2hpbGRyZW4="><span class="gt_from_md">Table 1. Sociodemographic characteristics of Peruvian children</span></span></caption>
+  <thead>
+    <tr class="gt_col_headings gt_spanner_row">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="2" colspan="1" scope="col" id="label"><span data-qmd-base64="PHN0cm9uZz5DaGFyYWN0ZXJpc3RpYzwvc3Ryb25nPg=="><span class="gt_from_md"><strong>Characteristic</strong></span></span></th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="1" scope="col" id="level 1; stat_0_1">
+        <div class="gt_column_spanner"><span data-qmd-base64="PHN0cm9uZz5BYnNvbHV0ZSBmcmVxdWVuY3k8L3N0cm9uZz4="><span class="gt_from_md"><strong>Absolute frequency</strong></span></span></div>
+      </th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2" scope="colgroup" id="level 1; stat_0_2">
+        <div class="gt_column_spanner"><span data-qmd-base64="PHN0cm9uZz5XZWlnaHRlZCBwcm9wb3J0aW9uPC9zdHJvbmc+"><span class="gt_from_md"><strong>Weighted proportion</strong></span></span></div>
+      </th>
+    </tr>
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="stat_0_1"><span data-qmd-base64="PHN0cm9uZz5OID0gMTg3MzgxPC9zdHJvbmc+"><span class="gt_from_md"><strong>N = 187381</strong></span></span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="stat_0_2"><span data-qmd-base64="PHN0cm9uZz5OID0gOTksNzYzPC9zdHJvbmc+"><span class="gt_from_md"><strong>N = 99,763</strong></span></span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>2</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="ci_stat_0_2"><span data-qmd-base64="PHN0cm9uZz45NSUgQ0k8L3N0cm9uZz4="><span class="gt_from_md"><strong>95% CI</strong></span></span></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Área de residencia</td>
+<td headers="stat_0_1" class="gt_row gt_center"><br></td>
+<td headers="stat_0_2" class="gt_row gt_center"><br></td>
+<td headers="ci_stat_0_2" class="gt_row gt_center"><br></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Urbano</td>
+<td headers="stat_0_1" class="gt_row gt_center">125,909</td>
+<td headers="stat_0_2" class="gt_row gt_center">70.64</td>
+<td headers="ci_stat_0_2" class="gt_row gt_center">69.92 - 71.35</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Rural</td>
+<td headers="stat_0_1" class="gt_row gt_center">61,472</td>
+<td headers="stat_0_2" class="gt_row gt_center">29.36</td>
+<td headers="ci_stat_0_2" class="gt_row gt_center">28.65 - 30.08</td></tr>
+    <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Sexo del infante</td>
+<td headers="stat_0_1" class="gt_row gt_center"><br></td>
+<td headers="stat_0_2" class="gt_row gt_center"><br></td>
+<td headers="ci_stat_0_2" class="gt_row gt_center"><br></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Masculino</td>
+<td headers="stat_0_1" class="gt_row gt_center">95,775</td>
+<td headers="stat_0_2" class="gt_row gt_center">51.13</td>
+<td headers="ci_stat_0_2" class="gt_row gt_center">50.81 - 51.45</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Femenino</td>
+<td headers="stat_0_1" class="gt_row gt_center">91,606</td>
+<td headers="stat_0_2" class="gt_row gt_center">48.87</td>
+<td headers="ci_stat_0_2" class="gt_row gt_center">48.55 - 49.19</td></tr>
+    <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Nivel educativo de la madre</td>
+<td headers="stat_0_1" class="gt_row gt_center"><br></td>
+<td headers="stat_0_2" class="gt_row gt_center"><br></td>
+<td headers="ci_stat_0_2" class="gt_row gt_center"><br></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Sin educación</td>
+<td headers="stat_0_1" class="gt_row gt_center">3,594</td>
+<td headers="stat_0_2" class="gt_row gt_center">2.00</td>
+<td headers="ci_stat_0_2" class="gt_row gt_center">1.876 - 2.138</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Primaria</td>
+<td headers="stat_0_1" class="gt_row gt_center">40,898</td>
+<td headers="stat_0_2" class="gt_row gt_center">22.50</td>
+<td headers="ci_stat_0_2" class="gt_row gt_center">22.02 - 22.99</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Secundaria</td>
+<td headers="stat_0_1" class="gt_row gt_center">114,709</td>
+<td headers="stat_0_2" class="gt_row gt_center">63.19</td>
+<td headers="ci_stat_0_2" class="gt_row gt_center">62.67 - 63.71</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Superior</td>
+<td headers="stat_0_1" class="gt_row gt_center">22,672</td>
+<td headers="stat_0_2" class="gt_row gt_center">12.31</td>
+<td headers="ci_stat_0_2" class="gt_row gt_center">11.96 - 12.66</td></tr>
+    <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Edad del infante</td>
+<td headers="stat_0_1" class="gt_row gt_center"><br></td>
+<td headers="stat_0_2" class="gt_row gt_center"><br></td>
+<td headers="ci_stat_0_2" class="gt_row gt_center"><br></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;&lt; 12 meses</td>
+<td headers="stat_0_1" class="gt_row gt_center">19,693</td>
+<td headers="stat_0_2" class="gt_row gt_center">10.38</td>
+<td headers="ci_stat_0_2" class="gt_row gt_center">10.19 - 10.57</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;12 a 23 meses</td>
+<td headers="stat_0_1" class="gt_row gt_center">40,240</td>
+<td headers="stat_0_2" class="gt_row gt_center">21.63</td>
+<td headers="ci_stat_0_2" class="gt_row gt_center">21.37 - 21.89</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;24 a 35 meses</td>
+<td headers="stat_0_1" class="gt_row gt_center">41,728</td>
+<td headers="stat_0_2" class="gt_row gt_center">22.31</td>
+<td headers="ci_stat_0_2" class="gt_row gt_center">22.04 - 22.57</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;36 a 59 meses</td>
+<td headers="stat_0_1" class="gt_row gt_center">85,720</td>
+<td headers="stat_0_2" class="gt_row gt_center">45.69</td>
+<td headers="ci_stat_0_2" class="gt_row gt_center">45.40 - 45.98</td></tr>
+    <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Doble carga de malnutrición</td>
+<td headers="stat_0_1" class="gt_row gt_center"><br></td>
+<td headers="stat_0_2" class="gt_row gt_center"><br></td>
+<td headers="ci_stat_0_2" class="gt_row gt_center"><br></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;No</td>
+<td headers="stat_0_1" class="gt_row gt_center">106,706</td>
+<td headers="stat_0_2" class="gt_row gt_center">90.44</td>
+<td headers="ci_stat_0_2" class="gt_row gt_center">90.13 - 90.74</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Si</td>
+<td headers="stat_0_1" class="gt_row gt_center">12,783</td>
+<td headers="stat_0_2" class="gt_row gt_center">9.56</td>
+<td headers="ci_stat_0_2" class="gt_row gt_center">9.259 - 9.874</td></tr>
+  </tbody>
+  <tfoot class="gt_sourcenotes">
+    <tr>
+      <td class="gt_sourcenote" colspan="4"><span data-qmd-base64="QWJicmV2aWF0aW9uOiBDSSA9IENvbmZpZGVuY2UgSW50ZXJ2YWw="><span class="gt_from_md">Abbreviation: CI = Confidence Interval</span></span></td>
+    </tr>
+  </tfoot>
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="4"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> <span data-qmd-base64="VW53ZWlnaHRlZCBOOyBNZWFu"><span class="gt_from_md">Unweighted N; Mean</span></span></td>
+    </tr>
+    <tr>
+      <td class="gt_footnote" colspan="4"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>2</sup></span> <span data-qmd-base64="V2VpZ2h0ZWQgcGVyY2VudGFnZTsgTWVhbiAoU0Qp"><span class="gt_from_md">Weighted percentage; Mean (SD)</span></span></td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="confirm-with-dplyr-package" class="level3">
+<h3 class="anchored" data-anchor-id="confirm-with-dplyr-package">Confirm with <code>dplyr</code> package</h3>
+</section>
+</section>
+<section id="table-2-sociodemographic-characteristics-of-peruvian-children-by-dbm-status" class="level2">
+<h2 class="anchored" data-anchor-id="table-2-sociodemographic-characteristics-of-peruvian-children-by-dbm-status">Table 2: Sociodemographic characteristics of Peruvian children by DBM status</h2>
+<p>This is the bivariate analysis</p>
+<div style="text-align: justify">
+<p>Chi-squared test with Rao &amp; Scott’s second-order correction and Holm-Bonferroni method to adjust for multiple tests. Use (García-Pérez 2023) to understand the goodness of fit.</p>
+</div>
+<section id="weighted-bivariate-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="weighted-bivariate-analysis">Weighted bivariate analysis</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div id="pbebcncrvn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#pbebcncrvn table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#pbebcncrvn thead, #pbebcncrvn tbody, #pbebcncrvn tfoot, #pbebcncrvn tr, #pbebcncrvn td, #pbebcncrvn th {
+  border-style: none;
+}
+
+#pbebcncrvn p {
+  margin: 0;
+  padding: 0;
+}
+
+#pbebcncrvn .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#pbebcncrvn .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#pbebcncrvn .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#pbebcncrvn .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#pbebcncrvn .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#pbebcncrvn .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#pbebcncrvn .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#pbebcncrvn .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#pbebcncrvn .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#pbebcncrvn .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#pbebcncrvn .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#pbebcncrvn .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#pbebcncrvn .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#pbebcncrvn .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#pbebcncrvn .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#pbebcncrvn .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#pbebcncrvn .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#pbebcncrvn .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#pbebcncrvn .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#pbebcncrvn .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#pbebcncrvn .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#pbebcncrvn .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#pbebcncrvn .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#pbebcncrvn .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#pbebcncrvn .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#pbebcncrvn .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#pbebcncrvn .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#pbebcncrvn .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#pbebcncrvn .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#pbebcncrvn .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#pbebcncrvn .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#pbebcncrvn .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#pbebcncrvn .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#pbebcncrvn .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#pbebcncrvn .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#pbebcncrvn .gt_left {
+  text-align: left;
+}
+
+#pbebcncrvn .gt_center {
+  text-align: center;
+}
+
+#pbebcncrvn .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#pbebcncrvn .gt_font_normal {
+  font-weight: normal;
+}
+
+#pbebcncrvn .gt_font_bold {
+  font-weight: bold;
+}
+
+#pbebcncrvn .gt_font_italic {
+  font-style: italic;
+}
+
+#pbebcncrvn .gt_super {
+  font-size: 65%;
+}
+
+#pbebcncrvn .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#pbebcncrvn .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#pbebcncrvn .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#pbebcncrvn .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#pbebcncrvn .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#pbebcncrvn .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#pbebcncrvn .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#pbebcncrvn .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#pbebcncrvn div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <caption><span data-qmd-base64="VGFibGUgMi4gU29jaW9kZW1vZ3JhcGhpYyBjaGFyYWN0ZXJpc3RpY3Mgb2YgUGVydXZpYW4gY2hpbGRyZW4gYnkgZG91YmxlIGJ1cmRlbiBvZiBtYWxudXRyaXRpb24gc3RhdHVz"><span class="gt_from_md">Table 2. Sociodemographic characteristics of Peruvian children by double burden of malnutrition status</span></span></caption>
+  <thead>
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="label"><span data-qmd-base64="PHN0cm9uZz5DaGFyYWN0ZXJpc3RpYzwvc3Ryb25nPg=="><span class="gt_from_md"><strong>Characteristic</strong></span></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="stat_1"><span data-qmd-base64="PHN0cm9uZz5Obzwvc3Ryb25nPjxiciAvPgpOID0gNTgsOTg0"><span class="gt_from_md"><strong>No</strong><br>
+N = 58,984</span></span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="ci_stat_1"><span data-qmd-base64="PHN0cm9uZz45NSUgQ0k8L3N0cm9uZz4="><span class="gt_from_md"><strong>95% CI</strong></span></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="stat_2"><span data-qmd-base64="PHN0cm9uZz5TaTwvc3Ryb25nPjxiciAvPgpOID0gNiwyMzc="><span class="gt_from_md"><strong>Si</strong><br>
+N = 6,237</span></span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="ci_stat_2"><span data-qmd-base64="PHN0cm9uZz45NSUgQ0k8L3N0cm9uZz4="><span class="gt_from_md"><strong>95% CI</strong></span></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="p.value"><span data-qmd-base64="PHN0cm9uZz5wLXZhbHVlPC9zdHJvbmc+"><span class="gt_from_md"><strong>p-value</strong></span></span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>2</sup></span></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Área de residencia</td>
+<td headers="stat_1" class="gt_row gt_center"><br></td>
+<td headers="ci_stat_1" class="gt_row gt_center"><br></td>
+<td headers="stat_2" class="gt_row gt_center"><br></td>
+<td headers="ci_stat_2" class="gt_row gt_center"><br></td>
+<td headers="p.value" class="gt_row gt_center" style="font-weight: bold;">&lt;0.001</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Urbano</td>
+<td headers="stat_1" class="gt_row gt_center">46,265 (78.44)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">77.77 - 79.09</td>
+<td headers="stat_2" class="gt_row gt_center">2,458 (39.41)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">37.78 - 41.07</td>
+<td headers="p.value" class="gt_row gt_center"><br></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Rural</td>
+<td headers="stat_1" class="gt_row gt_center">12,719 (21.56)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">20.91 - 22.23</td>
+<td headers="stat_2" class="gt_row gt_center">3,779 (60.59)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">58.93 - 62.22</td>
+<td headers="p.value" class="gt_row gt_center"><br></td></tr>
+    <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Sexo del infante</td>
+<td headers="stat_1" class="gt_row gt_center"><br></td>
+<td headers="ci_stat_1" class="gt_row gt_center"><br></td>
+<td headers="stat_2" class="gt_row gt_center"><br></td>
+<td headers="ci_stat_2" class="gt_row gt_center"><br></td>
+<td headers="p.value" class="gt_row gt_center" style="font-weight: bold;">&lt;0.001</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Masculino</td>
+<td headers="stat_1" class="gt_row gt_center">29,292 (49.66)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">49.23 - 50.09</td>
+<td headers="stat_2" class="gt_row gt_center">3,575 (57.32)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">56.20 - 58.44</td>
+<td headers="p.value" class="gt_row gt_center"><br></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Femenino</td>
+<td headers="stat_1" class="gt_row gt_center">29,693 (50.34)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">49.91 - 50.77</td>
+<td headers="stat_2" class="gt_row gt_center">2,662 (42.68)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">41.56 - 43.80</td>
+<td headers="p.value" class="gt_row gt_center"><br></td></tr>
+    <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Nivel educativo de la madre</td>
+<td headers="stat_1" class="gt_row gt_center"><br></td>
+<td headers="ci_stat_1" class="gt_row gt_center"><br></td>
+<td headers="stat_2" class="gt_row gt_center"><br></td>
+<td headers="ci_stat_2" class="gt_row gt_center"><br></td>
+<td headers="p.value" class="gt_row gt_center" style="font-weight: bold;">&lt;0.001</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Sin educación</td>
+<td headers="stat_1" class="gt_row gt_center">691 (1.21)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">1.113 - 1.315</td>
+<td headers="stat_2" class="gt_row gt_center">358 (5.89)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">5.261 - 6.597</td>
+<td headers="p.value" class="gt_row gt_center"><br></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Primaria</td>
+<td headers="stat_1" class="gt_row gt_center">9,712 (17.00)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">16.55 - 17.45</td>
+<td headers="stat_2" class="gt_row gt_center">2,806 (46.22)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">44.90 - 47.54</td>
+<td headers="p.value" class="gt_row gt_center"><br></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Secundaria</td>
+<td headers="stat_1" class="gt_row gt_center">37,842 (66.23)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">65.68 - 66.77</td>
+<td headers="stat_2" class="gt_row gt_center">2,749 (45.28)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">43.88 - 46.68</td>
+<td headers="p.value" class="gt_row gt_center"><br></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Superior</td>
+<td headers="stat_1" class="gt_row gt_center">8,894 (15.57)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">15.10 - 16.04</td>
+<td headers="stat_2" class="gt_row gt_center">159 (2.61)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">2.263 - 3.016</td>
+<td headers="p.value" class="gt_row gt_center"><br></td></tr>
+    <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Edad del infante</td>
+<td headers="stat_1" class="gt_row gt_center"><br></td>
+<td headers="ci_stat_1" class="gt_row gt_center"><br></td>
+<td headers="stat_2" class="gt_row gt_center"><br></td>
+<td headers="ci_stat_2" class="gt_row gt_center"><br></td>
+<td headers="p.value" class="gt_row gt_center" style="font-weight: bold;">&lt;0.001</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;&lt; 12 meses</td>
+<td headers="stat_1" class="gt_row gt_center">3,695 (6.26)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">6.054 - 6.482</td>
+<td headers="stat_2" class="gt_row gt_center">782 (12.53)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">11.81 - 13.30</td>
+<td headers="p.value" class="gt_row gt_center"><br></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;12 a 23 meses</td>
+<td headers="stat_1" class="gt_row gt_center">9,276 (15.73)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">15.40 - 16.05</td>
+<td headers="stat_2" class="gt_row gt_center">2,225 (35.67)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">34.57 - 36.79</td>
+<td headers="p.value" class="gt_row gt_center"><br></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;24 a 35 meses</td>
+<td headers="stat_1" class="gt_row gt_center">13,823 (23.44)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">23.08 - 23.80</td>
+<td headers="stat_2" class="gt_row gt_center">1,407 (22.56)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">21.61 - 23.53</td>
+<td headers="p.value" class="gt_row gt_center"><br></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;36 a 59 meses</td>
+<td headers="stat_1" class="gt_row gt_center">32,190 (54.57)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">54.15 - 54.99</td>
+<td headers="stat_2" class="gt_row gt_center">1,823 (29.24)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">28.23 - 30.27</td>
+<td headers="p.value" class="gt_row gt_center"><br></td></tr>
+  </tbody>
+  <tfoot class="gt_sourcenotes">
+    <tr>
+      <td class="gt_sourcenote" colspan="6"><span data-qmd-base64="QWJicmV2aWF0aW9uOiBDSSA9IENvbmZpZGVuY2UgSW50ZXJ2YWw="><span class="gt_from_md">Abbreviation: CI = Confidence Interval</span></span></td>
+    </tr>
+  </tfoot>
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="6"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> <span data-qmd-base64="biAoJSk="><span class="gt_from_md">n (%)</span></span></td>
+    </tr>
+    <tr>
+      <td class="gt_footnote" colspan="6"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>2</sup></span> <span data-qmd-base64="UGVhcnNvbuKAmXMgWF4yOiBSYW8gJmFtcDsgU2NvdHQgYWRqdXN0bWVudA=="><span class="gt_from_md">Pearson’s X^2: Rao &amp; Scott adjustment</span></span></td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="confirm-with-dplyr-package-1" class="level3">
+<h3 class="anchored" data-anchor-id="confirm-with-dplyr-package-1">Confirm with <code>dplyr</code> package</h3>
+</section>
+</section>
+<section id="table-3-binomial-logistic-regression-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="table-3-binomial-logistic-regression-analysis">Table 3: Binomial logistic regression analysis</h2>
+<div style="text-align: justify">
+<p>Let’s use the <code>svyglm()</code> function from the <code>survey</code> package to fit a generalised linear model to data obtained from a complex survey design, incorporating inverse-probability weighting and design-based standard errors that account for stratification, clustering, and sample weights. This function returns <em>model-robust</em> standard errors. Specifically, these are Horvitz–Thompson-type standard errors, which are a generalisation of the <code>sandwich</code> estimators used in robust regression. In particular, a quasi-Poisson svyglm will return correct standard errors for relative risk regression models. This is a common approach in epidemiological studies to account for the complex survey design, including stratification, clustering, and sample weights.</p>
+</div>
+<section id="unadjusted-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="unadjusted-analysis">Unadjusted analysis</h3>
+</section>
+<section id="adjusted-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="adjusted-analysis">Adjusted analysis</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div id="awhjxroqie" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#awhjxroqie table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#awhjxroqie thead, #awhjxroqie tbody, #awhjxroqie tfoot, #awhjxroqie tr, #awhjxroqie td, #awhjxroqie th {
+  border-style: none;
+}
+
+#awhjxroqie p {
+  margin: 0;
+  padding: 0;
+}
+
+#awhjxroqie .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#awhjxroqie .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#awhjxroqie .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#awhjxroqie .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#awhjxroqie .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#awhjxroqie .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#awhjxroqie .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#awhjxroqie .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#awhjxroqie .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#awhjxroqie .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#awhjxroqie .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#awhjxroqie .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#awhjxroqie .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#awhjxroqie .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#awhjxroqie .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#awhjxroqie .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#awhjxroqie .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#awhjxroqie .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#awhjxroqie .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#awhjxroqie .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#awhjxroqie .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#awhjxroqie .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#awhjxroqie .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#awhjxroqie .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#awhjxroqie .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#awhjxroqie .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#awhjxroqie .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#awhjxroqie .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#awhjxroqie .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#awhjxroqie .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#awhjxroqie .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#awhjxroqie .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#awhjxroqie .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#awhjxroqie .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#awhjxroqie .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#awhjxroqie .gt_left {
+  text-align: left;
+}
+
+#awhjxroqie .gt_center {
+  text-align: center;
+}
+
+#awhjxroqie .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#awhjxroqie .gt_font_normal {
+  font-weight: normal;
+}
+
+#awhjxroqie .gt_font_bold {
+  font-weight: bold;
+}
+
+#awhjxroqie .gt_font_italic {
+  font-style: italic;
+}
+
+#awhjxroqie .gt_super {
+  font-size: 65%;
+}
+
+#awhjxroqie .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#awhjxroqie .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#awhjxroqie .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#awhjxroqie .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#awhjxroqie .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#awhjxroqie .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#awhjxroqie .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#awhjxroqie .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#awhjxroqie div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header gt_col_headings gt_spanner_row">
+<th rowspan="2" id="label" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"><strong>Characteristic</strong></th>
+<th colspan="3" id="level 1; estimate_1" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
+<strong>Unadjusted Analysis</strong>
+</div></th>
+<th colspan="3" id="level 1; estimate_2" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
+<strong>Adjusted Analysis</strong>
+</div></th>
+</tr>
+<tr class="odd gt_col_headings">
+<th id="estimate_1" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>IRR</strong></th>
+<th id="conf.low_1" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>95% CI</strong></th>
+<th id="p.value_1" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>p-value</strong></th>
+<th id="estimate_2" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>IRR</strong></th>
+<th id="conf.low_2" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>95% CI</strong></th>
+<th id="p.value_2" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>p-value</strong></th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">Área de residencia</td>
+<td class="gt_row gt_center" headers="estimate_1"><br>
+</td>
+<td class="gt_row gt_center" headers="conf.low_1"><br>
+</td>
+<td class="gt_row gt_center" headers="p.value_1"><br>
+</td>
+<td class="gt_row gt_center" headers="estimate_2"><br>
+</td>
+<td class="gt_row gt_center" headers="conf.low_2"><br>
+</td>
+<td class="gt_row gt_center" headers="p.value_2"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Urbano</td>
+<td class="gt_row gt_center" headers="estimate_1">—</td>
+<td class="gt_row gt_center" headers="conf.low_1">—</td>
+<td class="gt_row gt_center" headers="p.value_1"><br>
+</td>
+<td class="gt_row gt_center" headers="estimate_2">—</td>
+<td class="gt_row gt_center" headers="conf.low_2">—</td>
+<td class="gt_row gt_center" headers="p.value_2"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Rural</td>
+<td class="gt_row gt_center" headers="estimate_1">4.54</td>
+<td class="gt_row gt_center" headers="conf.low_1">4.27, 4.82</td>
+<td class="gt_row gt_center" headers="p.value_1">&lt;0.001</td>
+<td class="gt_row gt_center" headers="estimate_2">2.78</td>
+<td class="gt_row gt_center" headers="conf.low_2">2.60, 2.96</td>
+<td class="gt_row gt_center" headers="p.value_2">&lt;0.001</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">Sexo del infante</td>
+<td class="gt_row gt_center" headers="estimate_1"><br>
+</td>
+<td class="gt_row gt_center" headers="conf.low_1"><br>
+</td>
+<td class="gt_row gt_center" headers="p.value_1"><br>
+</td>
+<td class="gt_row gt_center" headers="estimate_2"><br>
+</td>
+<td class="gt_row gt_center" headers="conf.low_2"><br>
+</td>
+<td class="gt_row gt_center" headers="p.value_2"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Masculino</td>
+<td class="gt_row gt_center" headers="estimate_1">—</td>
+<td class="gt_row gt_center" headers="conf.low_1">—</td>
+<td class="gt_row gt_center" headers="p.value_1"><br>
+</td>
+<td class="gt_row gt_center" headers="estimate_2">—</td>
+<td class="gt_row gt_center" headers="conf.low_2">—</td>
+<td class="gt_row gt_center" headers="p.value_2"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Femenino</td>
+<td class="gt_row gt_center" headers="estimate_1">0.76</td>
+<td class="gt_row gt_center" headers="conf.low_1">0.72, 0.79</td>
+<td class="gt_row gt_center" headers="p.value_1">&lt;0.001</td>
+<td class="gt_row gt_center" headers="estimate_2">0.76</td>
+<td class="gt_row gt_center" headers="conf.low_2">0.73, 0.79</td>
+<td class="gt_row gt_center" headers="p.value_2">&lt;0.001</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">Nivel educativo de la madre</td>
+<td class="gt_row gt_center" headers="estimate_1"><br>
+</td>
+<td class="gt_row gt_center" headers="conf.low_1"><br>
+</td>
+<td class="gt_row gt_center" headers="p.value_1"><br>
+</td>
+<td class="gt_row gt_center" headers="estimate_2"><br>
+</td>
+<td class="gt_row gt_center" headers="conf.low_2"><br>
+</td>
+<td class="gt_row gt_center" headers="p.value_2"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Sin educación</td>
+<td class="gt_row gt_center" headers="estimate_1">—</td>
+<td class="gt_row gt_center" headers="conf.low_1">—</td>
+<td class="gt_row gt_center" headers="p.value_1"><br>
+</td>
+<td class="gt_row gt_center" headers="estimate_2">—</td>
+<td class="gt_row gt_center" headers="conf.low_2">—</td>
+<td class="gt_row gt_center" headers="p.value_2"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Primaria</td>
+<td class="gt_row gt_center" headers="estimate_1">0.66</td>
+<td class="gt_row gt_center" headers="conf.low_1">0.60, 0.72</td>
+<td class="gt_row gt_center" headers="p.value_1">&lt;0.001</td>
+<td class="gt_row gt_center" headers="estimate_2">0.74</td>
+<td class="gt_row gt_center" headers="conf.low_2">0.68, 0.80</td>
+<td class="gt_row gt_center" headers="p.value_2">&lt;0.001</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Secundaria</td>
+<td class="gt_row gt_center" headers="estimate_1">0.20</td>
+<td class="gt_row gt_center" headers="conf.low_1">0.18, 0.22</td>
+<td class="gt_row gt_center" headers="p.value_1">&lt;0.001</td>
+<td class="gt_row gt_center" headers="estimate_2">0.34</td>
+<td class="gt_row gt_center" headers="conf.low_2">0.31, 0.38</td>
+<td class="gt_row gt_center" headers="p.value_2">&lt;0.001</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Superior</td>
+<td class="gt_row gt_center" headers="estimate_1">0.05</td>
+<td class="gt_row gt_center" headers="conf.low_1">0.04, 0.06</td>
+<td class="gt_row gt_center" headers="p.value_1">&lt;0.001</td>
+<td class="gt_row gt_center" headers="estimate_2">0.11</td>
+<td class="gt_row gt_center" headers="conf.low_2">0.09, 0.13</td>
+<td class="gt_row gt_center" headers="p.value_2">&lt;0.001</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">Edad del infante</td>
+<td class="gt_row gt_center" headers="estimate_1"><br>
+</td>
+<td class="gt_row gt_center" headers="conf.low_1"><br>
+</td>
+<td class="gt_row gt_center" headers="p.value_1"><br>
+</td>
+<td class="gt_row gt_center" headers="estimate_2"><br>
+</td>
+<td class="gt_row gt_center" headers="conf.low_2"><br>
+</td>
+<td class="gt_row gt_center" headers="p.value_2"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;&lt; 12 meses</td>
+<td class="gt_row gt_center" headers="estimate_1">—</td>
+<td class="gt_row gt_center" headers="conf.low_1">—</td>
+<td class="gt_row gt_center" headers="p.value_1"><br>
+</td>
+<td class="gt_row gt_center" headers="estimate_2">—</td>
+<td class="gt_row gt_center" headers="conf.low_2">—</td>
+<td class="gt_row gt_center" headers="p.value_2"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;12 a 23 meses</td>
+<td class="gt_row gt_center" headers="estimate_1">1.11</td>
+<td class="gt_row gt_center" headers="conf.low_1">1.03, 1.19</td>
+<td class="gt_row gt_center" headers="p.value_1">0.004</td>
+<td class="gt_row gt_center" headers="estimate_2">1.14</td>
+<td class="gt_row gt_center" headers="conf.low_2">1.06, 1.21</td>
+<td class="gt_row gt_center" headers="p.value_2">&lt;0.001</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;24 a 35 meses</td>
+<td class="gt_row gt_center" headers="estimate_1">0.53</td>
+<td class="gt_row gt_center" headers="conf.low_1">0.49, 0.57</td>
+<td class="gt_row gt_center" headers="p.value_1">&lt;0.001</td>
+<td class="gt_row gt_center" headers="estimate_2">0.55</td>
+<td class="gt_row gt_center" headers="conf.low_2">0.52, 0.60</td>
+<td class="gt_row gt_center" headers="p.value_2">&lt;0.001</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;36 a 59 meses</td>
+<td class="gt_row gt_center" headers="estimate_1">0.31</td>
+<td class="gt_row gt_center" headers="conf.low_1">0.29, 0.33</td>
+<td class="gt_row gt_center" headers="p.value_1">&lt;0.001</td>
+<td class="gt_row gt_center" headers="estimate_2">0.31</td>
+<td class="gt_row gt_center" headers="conf.low_2">0.29, 0.33</td>
+<td class="gt_row gt_center" headers="p.value_2">&lt;0.001</td>
+</tr>
+</tbody><tfoot class="gt_sourcenotes">
+<tr class="even">
+<td colspan="7" class="gt_sourcenote">Abbreviations: CI = Confidence Interval, IRR = Incidence Rate Ratio</td>
+</tr>
+</tfoot>
+
+</table>
+
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="figure-1" class="level2">
+<h2 class="anchored" data-anchor-id="figure-1">Figure 1</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>, , year = 2011
+
+                          area_residencia_factor
+DBM_anemia_stunting_factor   Urbano    Rural
+                        No 5.759792 1.766505
+                        Si 3.102523 6.838287
+
+, , year = 2012
+
+                          area_residencia_factor
+DBM_anemia_stunting_factor   Urbano    Rural
+                        No 5.824472 2.010863
+                        Si 3.626780 6.803063
+
+, , year = 2013
+
+                          area_residencia_factor
+DBM_anemia_stunting_factor   Urbano    Rural
+                        No 5.510648 1.753359
+                        Si 3.947857 5.796032
+
+, , year = 2014
+
+                          area_residencia_factor
+DBM_anemia_stunting_factor   Urbano    Rural
+                        No 6.251672 1.785239
+                        Si 3.667016 6.264249
+
+, , year = 2015
+
+                          area_residencia_factor
+DBM_anemia_stunting_factor   Urbano    Rural
+                        No 8.301172 2.228765
+                        Si 4.723609 5.918593
+
+, , year = 2016
+
+                          area_residencia_factor
+DBM_anemia_stunting_factor   Urbano    Rural
+                        No 7.955412 2.055178
+                        Si 3.967023 5.589207
+
+, , year = 2017
+
+                          area_residencia_factor
+DBM_anemia_stunting_factor   Urbano    Rural
+                        No 6.918415 1.758647
+                        Si 3.311445 4.794313
+
+, , year = 2018
+
+                          area_residencia_factor
+DBM_anemia_stunting_factor   Urbano    Rural
+                        No 6.775804 1.735439
+                        Si 2.930827 4.296335
+
+, , year = 2019
+
+                          area_residencia_factor
+DBM_anemia_stunting_factor   Urbano    Rural
+                        No 6.671566 1.732491
+                        Si 2.674378 3.756221
+
+, , year = 2020
+
+                          area_residencia_factor
+DBM_anemia_stunting_factor   Urbano    Rural
+                        No 6.347619 1.727246
+                        Si 2.446678 3.663193
+
+, , year = 2021
+
+                          area_residencia_factor
+DBM_anemia_stunting_factor   Urbano    Rural
+                        No 6.447901 1.553701
+                        Si 2.450392 3.163927
+
+, , year = 2022
+
+                          area_residencia_factor
+DBM_anemia_stunting_factor   Urbano    Rural
+                        No 5.671481 1.456616
+                        Si 2.562712 3.705337</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ENDES_DBM_children_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="save-outputs" class="level1">
+<h1>Save outputs</h1>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

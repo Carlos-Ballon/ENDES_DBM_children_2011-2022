@@ -1,0 +1,241 @@
+---
+title: "ENDES_TBM_2019"
+author: "Carlos Ballon-Salcedo"
+format: html
+editor: source
+---
+
+# Set global knitr options
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+```
+
+# Load packages
+
+```{r}
+diseño <- svydesign(id =~ dbm$hv001, strata =~ dbm$hv022, weights=~ dbm$peso, data=dbm, nest=TRUE)
+
+
+#Gráfico de tendencias - DBM_1
+
+DBM_1_graph_prop<-prop.table(table(diseño$variables$DBM_1,diseño$variables$id1), margin = 2)*100
+DBM_1_graph_prop_dep<-prop.table(table(diseño$variables$DBM_1,diseño$variables$hv024,diseño$variables$id1), margin = c(2, 3)) * 100
+
+DBM_1_graph_prop_dep
+
+# Tabla general
+DBM_1_graph_prop <- prop.table(table(diseño$variables$DBM_1, diseño$variables$id1), margin = 2) * 100
+df_general <- as.data.frame(DBM_1_graph_prop)
+colnames(df_general) <- c("DBM_1", "id1", "Percentage")
+
+# Filtrar solo DBM_1 == 1
+df_general <- subset(df_general, DBM_1 == 1)
+df_general$hv024 <- "Total"  # Añadir etiqueta para distinguirlo luego
+
+# Tabla por departamento
+DBM_1_region_prop <- prop.table(table(diseño$variables$DBM_1, diseño$variables$hv024, diseño$variables$id1), margin = c(2, 3)) * 100
+df_region <- as.data.frame(DBM_1_region_prop)
+colnames(df_region) <- c("DBM_1", "hv024", "id1", "Percentage")
+
+# Filtrar solo DBM_1 == 1
+df_region <- subset(df_region, DBM_1 == 1)
+
+df_combined <- rbind(df_region, df_general)
+
+ggplot(df_combined, aes(x = id1, y = Percentage, group = hv024, colour = hv024)) +
+  geom_line(linewidth = 1) +
+  labs(x = "ID", y = "Percentage of DBM_1 = 1",
+       title = "DBM_1 = 1 over Time by Department and Overall") +
+  theme_minimal()
+
+# Filter to only keep rows where DBM_1 == 1
+df_plot_filtered <- subset(df_plot, DBM_1 == 1)
+
+# Plot
+
+ggplot(df_plot_filtered, aes(x = id1, y = Percentage, group = 1)) +
+  geom_line(color = "steelblue", linewidth = 1) +
+  labs(x = "ID", y = "Percentage", title = "Percentage of DBM") +
+  theme_minimal()
+
+
+# Tabla por área y año
+DBM_1_area_prop <- prop.table(table(diseño$variables$DBM_1,
+                                     diseño$variables$hv025,
+                                     diseño$variables$id1),
+                               margin = c(2, 3)) * 100
+
+# Convertir a data frame
+df_area <- as.data.frame(DBM_1_area_prop)
+colnames(df_area) <- c("DBM_1", "Area", "id1", "Percentage")
+
+# Filtrar solo DBM_1 == 1
+df_area <- subset(df_area, DBM_1 == 1)
+
+# Etiquetas legibles para área
+df_area$Area <- factor(df_area$Area, levels = c(1,2), labels = c("Urban", "Rural"))
+
+DBM_1_total_prop <- prop.table(table(diseño$variables$DBM_1,
+                                     diseño$variables$id1),
+                                margin = 2) * 100
+
+df_total <- as.data.frame(DBM_1_total_prop)
+colnames(df_total) <- c("DBM_1", "id1", "Percentage")
+df_total <- subset(df_total, DBM_1 == 1)
+df_total$Area <- "Total"
+
+df_combined <- rbind(df_area, df_total)
+ggplot(df_combined, aes(x = id1, y = Percentage, group = Area, colour = Area)) +
+  geom_line(linewidth = 1.2) +
+  scale_colour_manual(values = c("Urban" = "salmon", "Rural" = "blue", "Total" = "black")) +
+  labs(x = "ID", y = "Prevalence of DBM",
+       title = "DBM over Time by Area of Residence and Total",
+       colour = "Area") +
+  theme_minimal()
+
+
+
+#Proporción residencia
+prop.table(table(diseño$variables$hv025, diseño$variables$DBM_1,diseño$variables$id1), margin = 3)*100
+
+#Proporción edad categoría
+prop.table(table(diseño$variables$Edad_cat, diseño$variables$DBM_1,diseño$variables$id1), margin = 3)*100
+
+
+prop.table(table(diseño$variables$Edad_cat,diseño$variables$id1), margin = 2)*100
+table(diseño$variables$Edad_cat,diseño$variables$id1)
+
+
+#Edad general
+prop.table(table(diseño$variables$Edad_cat)) * 100
+
+table(diseño$variables$Edad_cat)
+
+#Edad  DBM
+prop.table(table(diseño$variables$Edad_cat, diseño$variables$DBM_1), margin = 2)*100
+
+age<-table(diseño$variables$Edad_cat, diseño$variables$DBM_1)
+chisq.test(age)
+
+
+#Área de residencia años
+prop.table(table(diseño$variables$hv025,diseño$variables$id1), margin = 2)*100
+
+table(diseño$variables$hv025,diseño$variables$id1)
+
+#Área de residencia general
+prop.table(table(diseño$variables$hv025)) * 100
+
+table(diseño$variables$hv025)
+
+#Área de residencia DBM
+prop.table(table(diseño$variables$hv025, diseño$variables$DBM_1), margin = 2)*100
+
+res_y<-table(diseño$variables$hv025, diseño$variables$DBM_1)
+chisq.test(res_y)
+
+
+#Educación madre años
+prop.table(table(diseño$variables$hc61,diseño$variables$id1), margin = 2)*100
+
+table(diseño$variables$hc61,diseño$variables$id1)
+
+#Educación madre general
+prop.table(table(diseño$variables$hc61)) * 100
+
+table(diseño$variables$hc61)
+
+#Educación madre DBM
+
+prop.table(table(diseño$variables$hc61, diseño$variables$DBM_1), margin = 2)*100
+educa_mother<-table(diseño$variables$hc61, diseño$variables$DBM_1)
+chisq.test(educa_mother)
+
+#Sexo  años
+prop.table(table(diseño$variables$hc27,diseño$variables$id1), margin = 2)*100
+
+table(diseño$variables$hc27,diseño$variables$id1)
+
+#Sexo general
+prop.table(table(diseño$variables$hc27)) * 100
+
+table(diseño$variables$hc27)
+
+#Sexo DBM
+
+prop.table(table(diseño$variables$hc27, diseño$variables$DBM_1), margin = 2)*100
+sexo<-table(diseño$variables$hc27, diseño$variables$DBM_1)
+chisq.test(sexo)
+
+#DBM
+
+prop.table(table(diseño$variables$DBM_1)) * 100
+table(diseño$variables$DBM_1)
+
+prop.table(table(diseño$variables$DBM_1,diseño$variables$id1), margin = 2)*100
+table(diseño$variables$DBM_1,diseño$variables$id1)
+           
+table(diseño$variables$hc27, diseño$variables$DBM_1)
+
+#Region
+
+prop.table(table(diseño$variables$DBM_1,diseño$variables$hv024), margin = 1)*100
+table(diseño$variables$DBM_1,diseño$variables$hv024)
+
+dbm$hv025 <- as.character(dbm$hv025)
+typeof(dbm$hv025)
+typeof(dbm$DBM_1)
+typeof(dbm$id1)
+glimpse(dbm$DBM_1)
+glimpse(dbm$hv025)
+
+
+
+###Inferential#######
+
+# Residence area 
+
+residence<-svyglm(DBM_1 ~ hv025, design = diseño, family = quasipoisson(link = "log"))
+summary(residence)
+
+exp(coef(residence))
+exp(confint(residence))
+
+#Sex
+
+sex<-svyglm(DBM_1 ~ hc27, design = diseño, family = quasipoisson(link = "log"))
+
+summary(sex)
+
+exp(coef(sex))
+exp(confint(sex))
+
+#Education level of the mother
+
+education<-svyglm(DBM_1 ~ hc61, design = diseño, family = quasipoisson(link = "log"))
+summary(education)
+
+exp(coef(education))
+exp(confint(education))
+
+#Year
+
+year<-svyglm(DBM_1 ~ as.factor(id1), design = diseño, family = quasipoisson(link = "log"))
+summary(year)
+
+exp(coef(year))
+exp(confint(year))
+
+#Age group
+
+diseño$variables$Edad_cat <- relevel(as.factor(diseño$variables$Edad_cat), ref = "Menores de 12 meses")
+
+edad<-svyglm(DBM_1 ~ as.factor(Edad_cat), design = diseño, family = quasipoisson(link = "log"))
+summary(edad)
+
+exp(coef(edad))
+exp(confint(edad))
+
+
+```
