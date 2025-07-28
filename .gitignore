@@ -13,4 +13,4 @@ data/*
 .Ruserdata
 
 # RStudio files
-.Rproj.user/
+.Rproj.user/*
