@@ -1,0 +1,6 @@
+*~
+outputs
+*.Rproj
+.Rhistory
+.RData
+.Ruserdata
