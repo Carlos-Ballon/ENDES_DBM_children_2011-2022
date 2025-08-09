@@ -14,11 +14,10 @@ my_dictionary = function(data) {
         set_variable_labels(edad_meses = "Edad del infante (meses)"), 
       
       edad_meses_cat = case_when(
-        hc1 >= 0  & hc1 <= 11  ~ 0,
-        hc1 >= 12 & hc1 <= 23  ~ 1,
-        hc1 >= 24 & hc1 <= 35  ~ 2,
-        hc1 >= 36 & hc1 <= 59  ~ 3,
-        TRUE ~ NA_integer_
+        hc1 >= 0  & hc1 <= 11 ~ 0,
+        hc1 >= 12 & hc1 <= 23 ~ 1,
+        hc1 >= 24 & hc1 <= 35 ~ 2,
+        hc1 >= 36 ~ 3
       ) |> 
         set_value_labels(edad_meses_cat = c(
           "< 12 meses" = 0,
