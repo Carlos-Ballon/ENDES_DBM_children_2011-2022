@@ -5,8 +5,8 @@ date: "`r Sys.Date()`"
 format: docx
 editor: source
 execute:
-  warning: false
-  message: false
+  warning: true
+  message: true
   out.extra: |
     class="img-responsive"
     style="display:block; margin-left:auto; margin-right:auto;"
@@ -41,7 +41,8 @@ pacman::p_load(
   scales,
   sf,
   survey,
-  srvyr)
+  srvyr,
+  performance)
 
 #source(here::here("scripts", "dictionary.R"))
 rfextras::load_scripts()
@@ -162,7 +163,7 @@ categorical_vars |>
 #| eval: false
 # Absolute frequency for categorical variables
 lapply(categorical_vars, function(x)
-  addmargins(table(x)))
+  addmargins(table(x, useNA = "ifany")))
 
 # Relative frequency for categorical variables
 lapply(categorical_vars, function(x)
@@ -585,7 +586,7 @@ table_3a <- data_dbm_svy |>
   bold_labels()
 ```
 
- ### Adjusted analysis
+### Adjusted analysis
 
 ```{r}
 # Multivariable analysis
@@ -617,6 +618,99 @@ table_3 <- tbl_merge(
 
 # View
 table_3
+```
+
+### Logistic Regression Assumptions and Diagnostics
+
+```{r}
+data_na <- data_dbm |>
+  dplyr::select(
+    DBM_anemia_stunting,
+    area_residencia_factor,
+    sexo_child_factor,
+    education_factor,
+    edad_meses_cat_factor
+  ) |>
+  drop_na()
+
+model_1 <- glm(
+  DBM_anemia_stunting ~
+    area_residencia_factor +
+    sexo_child_factor +
+    education_factor +
+    edad_meses_cat_factor,
+  data = data_na,
+  family = binomial(link = "log")
+)
+
+model_2 <- glm(
+  DBM_anemia_stunting ~
+    area_residencia_factor,
+  data = data_na,
+  family = binomial(link = "log")
+)
+
+model_3 <- glm(
+  DBM_anemia_stunting ~
+    sexo_child_factor,
+  data = data_na,
+  family = binomial(link = "log")
+)
+
+model_4 <- glm(
+  DBM_anemia_stunting ~
+    education_factor,
+  data = data_na,
+  family = binomial(link = "log")
+)
+
+model_5 <- glm(
+  DBM_anemia_stunting ~
+    edad_meses_cat_factor,
+  data = data_na,
+  family = binomial(link = "log")
+)
+
+model_interaction_1 <- glm(
+  DBM_anemia_stunting ~
+    sexo_child_factor*area_residencia_factor +
+    education_factor +
+    edad_meses_cat_factor,
+  data = data_na,
+  family = binomial(link = "log")
+)
+
+model_interaction_1 <- glm(
+  DBM_anemia_stunting ~
+    sexo_child_factor*area_residencia_factor +
+    education_factor +
+    edad_meses_cat_factor,
+  data = data_na,
+  family = binomial(link = "log")
+)
+
+
+summary(model_2)
+
+check_autocorrelation(model_1)
+
+check_model(model_1, check = c("linearity", "homogeneity"), residual_type = "normal")
+
+plot(model_1$residuals)
+
+test_likelihoodratio(model_1, model_2)
+
+test_likelihoodratio(model_1, model_3)
+
+test_likelihoodratio(model_1, model_4)
+
+test_likelihoodratio(model_1, model_5)
+
+test_likelihoodratio(model_1, model_interaction_1)
+
+m <- check_collinearity(model_1)
+
+plot(m)
 ```
 
 ## Figure 1: Prevalence
