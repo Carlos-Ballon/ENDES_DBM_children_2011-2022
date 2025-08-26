@@ -42,7 +42,8 @@ pacman::p_load(
   sf,
   survey,
   srvyr,
-  performance)
+  performance,
+  broom)
 
 #source(here::here("scripts", "dictionary.R"))
 rfextras::load_scripts()
@@ -102,7 +103,6 @@ data_dbm <- my_dictionary(data_dbm) |>
 ### Categorical data
 
 ```{r}
-#| eval: false
 # Select categorical variables (factors)
 categorical_vars <- data_dbm |>
   dplyr::select(where(\(x) is.character(x) | is.factor(x)))
@@ -680,17 +680,35 @@ model_interaction_1 <- glm(
   family = binomial(link = "log")
 )
 
-model_interaction_1 <- glm(
+model_interaction_2 <- glm(
   DBM_anemia_stunting ~
-    sexo_child_factor*area_residencia_factor +
-    education_factor +
+    sexo_child_factor*education_factor + 
+    area_residencia_factor +
     edad_meses_cat_factor,
   data = data_na,
   family = binomial(link = "log")
 )
 
+model_interaction_3 <- glm(
+  DBM_anemia_stunting ~
+    area_residencia_factor +
+    education_factor +
+    sexo_child_factor*edad_meses_cat_factor,
+  data = data_na,
+  family = binomial(link = "log")
+)
 
 summary(model_2)
+
+tidy(model_1, conf.int = TRUE, exponentiate = TRUE)
+
+tidy(model_3, conf.int = TRUE, exponentiate = TRUE)
+
+tidy(model_interaction_1, conf.int = TRUE, exponentiate = TRUE)
+
+tidy(model_interaction_2, conf.int = TRUE, exponentiate = TRUE)
+
+tidy(model_interaction_3, conf.int = TRUE, exponentiate = TRUE)
 
 check_autocorrelation(model_1)
 
@@ -708,9 +726,17 @@ test_likelihoodratio(model_1, model_5)
 
 test_likelihoodratio(model_1, model_interaction_1)
 
-m <- check_collinearity(model_1)
+m <- check_collinearity(model_interaction_1)
 
 plot(m)
+
+check_collinearity(model_1)
+
+check_collinearity(model_interaction_1)
+
+check_collinearity(model_interaction_2)
+
+check_collinearity(model_interaction_3)
 ```
 
 ## Figure 1: Prevalence
