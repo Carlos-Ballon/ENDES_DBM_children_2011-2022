@@ -1,0 +1,699 @@
+---
+title: "data_union_2015-2024"
+author: "Carlos Ballon-Salcedo"
+date: "`r Sys.Date()`"
+format: html
+editor: source
+---
+
+# Load packages
+
+```{r}
+pacman::p_load(
+  rio,
+  here,
+  tidyverse,
+  haven,
+  fs,
+  Hmisc,
+  finalfit,
+  epiDisplay,
+  labelled)
+
+source(here::here("scripts", "dictionary_2015-2024.R"))
+source(here::here("scripts", "build_endes_data.R"))
+```
+
+# Convert .sav databases to .dta (2015–2024)
+
+## Define source folder
+
+```{r}
+#| eval: false
+src <- here("data", "raw")
+```
+
+## List .sav files
+
+```{r}
+#| eval: false
+# List .sav files
+files <- fs::dir_ls(path = src, recurse = FALSE)
+
+# Filtrar archivos .sav que comienzan con 're', ignorando mayúsculas
+files <- files[tolower(path_ext(files)) == "sav" & grepl("^re", tolower(path_file(files)))]
+```
+
+## Function to convert each file
+
+```{r}
+#| eval: false
+convert_sav_to_dta <- function(file_path) {
+  tryCatch({
+    message("Convirtiendo: ", basename(file_path))
+    
+    # Leer archivo .sav
+    data <- import(file_path)  # rio detecta automáticamente el formato
+    
+    # Crear nombre base sin extensión
+    base_name <- fs::path_ext_remove(path_file(file_path))
+    
+    # Guardar como .dta en la misma carpeta
+    haven::write_dta(data, path(src, paste0(base_name, ".dta")))
+    
+  }, error = function(e) {
+    message(">> Omitido (error: ", e$message, ") en ", basename(file_path))
+  })
+}
+```
+
+## Apply conversion to all files
+
+```{r}
+#| eval: false
+purrr::map(files, convert_sav_to_dta)
+```
+
+# Import data
+
+## Variables selected for 2015-2024
+
+```{r}
+# Vector of variable names
+variables_endes_2015_2024 <- c(
+  "HHID", "HC0", "SH11A", "SH11B", "SH11C", "SH11D", "SH11E", "SH11Y", "SH11Z", 
+  "SH13", "SH15N", "HV102", "HV103", "HC1", "HC2", "HC3", "HC4", "HC5", "HC6", 
+  "HC7", "HC8", "HC9", "HC10", "HC11", "HC12", "HC13", "HC15", "HC16", "HC19", 
+  "HC27", "HC30", "HC31", "HC32", "HC51", "HC53", "HC55", "HC61", "HC62", "HC70",
+  "HC71", "HC72", "HC73", "HV201", "HV202", "HV204", "HV219", "HV228", "HV234", 
+  "HV235", "HV237", "HV237A", "HV237B", "HV237C", "HV237D", "HV237E", "HV237F", 
+  "HV237G", "HV237H", "HV237I", "HV237J", "HV237K", "HV237X", "HV237Z", "HV242", 
+  "HV246", "HV246A", "HV246B", "HV246C", "HV246D", "HV246E", "HV246F", "HV246G",
+  "HV246H", "HV246I", "HV246J", "HV246K", "HV247", "HV249", "HV250", "HV251", 
+  "HV270", "HV271", "HML2", "SHREGION", "SHPROVIN", "SHDISTRI", "SHTOTH", "SH42",
+  "SH43", "SH48", "SH49", "SH50", "SH58", "SH59", "SH61Q", "SH61R", "SH224", 
+  "SH225U", "SH227", "HV001", "HV005", "HV009", "HV010", "HV014", "HV021", 
+  "HV022", "HV023", "HV024", "HV025", "HV035", "HV040", "HV042", "HV043", "year"
+  )
+```
+
+# Questionnaires 2024
+
+```{r}
+# Hogar: Caracteristicas del Generales del Hogar
+rech0_2024 <- import(here("data", "raw", "RECH0_2024.dta"))
+
+# Hogar: Caracteristicas de los Miembros del Hogar
+rech1_2024 <- import(here("data", "raw", "RECH1_2024.dta"))
+
+# Hogar: Caracteristicas de los Miembros del Hogar (Educación y Seguro de Salud)
+rech4_2024 <- import(here("data", "raw", "RECH4_2024.dta"))
+
+# Individual: Peso y talla - Anemia
+rech6_2024 <- import(here("data", "raw", "RECH6_2024.dta"))
+
+# Hogar: Caracteristicas de la Vivienda
+rech23_2024 <- import(here("data", "raw", "RECH23_2024.dta"))
+```
+
+## Join data
+
+```{r}
+data_2024 <- build_endes_data(
+  rech0_2024, rech1_2024, rech4_2024, rech6_2024, rech23_2024, 2024)
+```
+
+## Select variables
+
+```{r}
+data_2024 <- data_2024 |>
+  dplyr::select(all_of(variables_endes_2015_2024))
+```
+
+## Recode and relevel (dictionary)
+
+```{r}
+data_2024 <- my_dictionary(data_2024) |>
+  dplyr::filter(
+    HV103 == 1, HV102 == 1, HC55 == 0, HC13 == 0, 
+    !is.na(edad_meses_minsa_cat), !is.na(dcronica), !is.na(anemia))
+```
+
+## Scaled survey weights
+
+::: {style="text-align: justify"}
+Scaling or normalization helps prevent issues such as `Sample size greater than population size`,” which happen when the sum of the weights `(∑weights)` exceeds the real or expected number of observations in the population. This imbalance can distort estimates of means, proportions, and standard errors.
+:::
+
+```{r}
+data_2024 <- data_2024 |>
+  mutate(weight_scaled = weights / sum(weights, na.rm = TRUE) * n())
+```
+
+# Questionnaires 2023
+
+```{r}
+# Hogar: Caracteristicas del Generales del Hogar
+rech0_2023 <- import(here("data", "raw", "RECH0_2023.dta"))
+
+# Hogar: Caracteristicas de los Miembros del Hogar
+rech1_2023 <- import(here("data", "raw", "RECH1_2023.dta"))
+
+# Hogar: Caracteristicas de los Miembros del Hogar (Educación y Seguro de Salud)
+rech4_2023 <- import(here("data", "raw", "RECH4_2023.dta"))
+
+# Individual: Peso y talla - Anemia
+rech6_2023 <- import(here("data", "raw", "RECH6_2023.dta"))
+
+# Hogar: Caracteristicas de la Vivienda
+rech23_2023 <- import(here("data", "raw", "RECH23_2023.dta"))
+```
+
+## Join data
+
+```{r}
+data_2023 <- build_endes_data(
+  rech0_2023, rech1_2023, rech4_2023, rech6_2023, rech23_2023, 2023)
+```
+
+## Select variables
+
+```{r}
+data_2023 <- data_2023 |>
+  dplyr::select(all_of(variables_endes_2015_2024))
+```
+
+## Recode and relevel (dictionary)
+
+```{r}
+data_2023 <- my_dictionary(data_2023) |>
+  dplyr::filter(
+    HV103==1, HV102 == 1, HC55 == 0, HC13 == 0, 
+    !is.na(edad_meses_minsa_cat), !is.na(dcronica), !is.na(anemia))
+```
+
+## Scaled survey weights
+
+```{r}
+data_2023 <- data_2023 |>
+  mutate(weight_scaled = weights / sum(weights, na.rm = TRUE) * n())
+```
+
+# Questionnaires 2022
+
+```{r}
+# Hogar: Caracteristicas del Generales del Hogar
+rech0_2022 <- import(here("data", "raw", "RECH0_2022.dta"))
+
+# Hogar: Caracteristicas de los Miembros del Hogar
+rech1_2022 <- import(here("data", "raw", "RECH1_2022.dta"))
+
+# Hogar: Caracteristicas de los Miembros del Hogar (Educación y Seguro de Salud)
+rech4_2022 <- import(here("data", "raw", "RECH4_2022.dta"))
+
+# Individual: Peso y talla - Anemia
+rech6_2022 <- import(here("data", "raw", "RECH6_2022.dta"))
+
+# Hogar: Caracteristicas de la Vivienda
+rech23_2022 <- import(here("data", "raw", "RECH23_2022.dta"))
+```
+
+## Join data
+
+```{r}
+data_2022 <- build_endes_data(
+  rech0_2022, rech1_2022, rech4_2022, rech6_2022, rech23_2022, 2022)
+```
+
+## Select variables
+
+```{r}
+data_2022 <- data_2022 |>
+  dplyr::select(all_of(variables_endes_2015_2024))
+```
+
+## Recode and relevel (dictionary)
+
+```{r}
+data_2022 <- my_dictionary(data_2022) |>
+  dplyr::filter(
+    HV103 == 1, HV102 == 1, HC55 == 0, HC13 == 0, 
+    !is.na(edad_meses_minsa_cat), !is.na(dcronica), !is.na(anemia))
+```
+
+## Scaled survey weights
+
+```{r}
+data_2022 <- data_2022 |>
+  mutate(weight_scaled = weights / sum(weights, na.rm = TRUE) * n())
+```
+
+# Questionnaires 2021
+
+```{r}
+# Hogar: Caracteristicas del Generales del Hogar
+rech0_2021 <- import(here("data", "raw", "RECH0_2021.dta"))
+
+# Hogar: Caracteristicas de los Miembros del Hogar
+rech1_2021 <- import(here("data", "raw", "RECH1_2021.dta"))
+
+# Hogar: Caracteristicas de los Miembros del Hogar (Educación y Seguro de Salud)
+rech4_2021 <- import(here("data", "raw", "RECH4_2021.dta"))
+
+# Individual: Peso y talla - Anemia
+rech6_2021 <- import(here("data", "raw", "RECH6_2021.dta"))
+
+# Hogar: Caracteristicas de la Vivienda
+rech23_2021 <- import(here("data", "raw", "RECH23_2021.dta"))
+```
+
+## Join data
+
+```{r}
+data_2021 <- build_endes_data(
+  rech0_2021, rech1_2021, rech4_2021, rech6_2021, rech23_2021, 2021)
+```
+
+## Select variables
+
+```{r}
+data_2021 <- data_2021 |>
+  dplyr::select(all_of(variables_endes_2015_2024))
+```
+
+## Recode and relevel (dictionary)
+
+```{r}
+data_2021 <- my_dictionary(data_2021) |>
+  dplyr::filter(
+    HV103==1, HV102 == 1, HC55 == 0, HC13 == 0, 
+    !is.na(edad_meses_minsa_cat), !is.na(dcronica), !is.na(anemia))
+```
+
+## Scaled survey weights
+
+```{r}
+data_2021 <- data_2021 |>
+  mutate(weight_scaled = weights / sum(weights, na.rm = TRUE) * n())
+```
+
+# Questionnaires 2020
+
+```{r}
+# Hogar: Caracteristicas del Generales del Hogar
+rech0_2020 <- import(here("data", "raw", "RECH0_2020.dta"))
+
+# Hogar: Caracteristicas de los Miembros del Hogar
+rech1_2020 <- import(here("data", "raw", "RECH1_2020.dta"))
+
+# Hogar: Caracteristicas de los Miembros del Hogar (Educación y Seguro de Salud)
+rech4_2020 <- import(here("data", "raw", "RECH4_2020.dta"))
+
+# Individual: Peso y talla - Anemia
+rech6_2020 <- import(here("data", "raw", "RECH6_2020.dta"))
+
+# Hogar: Caracteristicas de la Vivienda
+rech23_2020 <- import(here("data", "raw", "RECH23_2020.dta"))
+```
+
+## Join data
+
+```{r}
+data_2020 <- build_endes_data(
+  rech0_2020, rech1_2020, rech4_2020, rech6_2020, rech23_2020, 2020)
+```
+
+## Select variables
+
+```{r}
+data_2020 <- data_2020 |>
+  dplyr::select(all_of(variables_endes_2015_2024))
+```
+
+## Recode and relevel (dictionary)
+
+```{r}
+data_2020 <- my_dictionary(data_2020) |>
+  dplyr::filter(
+    HV103==1, HV102 == 1, HC55 == 0, HC13 == 0, 
+    !is.na(edad_meses_minsa_cat), !is.na(dcronica), !is.na(anemia))
+```
+
+## Scaled survey weights
+
+```{r}
+data_2020 <- data_2020 |>
+  mutate(weight_scaled = weights / sum(weights, na.rm = TRUE) * n())
+```
+
+# Questionnaires 2019
+
+```{r}
+# Hogar: Caracteristicas del Generales del Hogar
+rech0_2019 <- import(here("data", "raw", "RECH0_2019.dta"))
+
+# Hogar: Caracteristicas de los Miembros del Hogar
+rech1_2019 <- import(here("data", "raw", "RECH1_2019.dta"))
+
+# Hogar: Caracteristicas de los Miembros del Hogar (Educación y Seguro de Salud)
+rech4_2019 <- import(here("data", "raw", "RECH4_2019.dta"))
+
+# Individual: Peso y talla - Anemia
+rech6_2019 <- import(here("data", "raw", "RECH6_2019.dta"))
+
+# Hogar: Caracteristicas de la Vivienda
+rech23_2019 <- import(here("data", "raw", "RECH23_2019.dta"))
+```
+
+## Join data
+
+```{r}
+data_2019 <- build_endes_data(
+  rech0_2019, rech1_2019, rech4_2019, rech6_2019, rech23_2019, 2019)
+```
+
+## Select variables
+
+```{r}
+data_2019 <- data_2019 |>
+  dplyr::select(all_of(variables_endes_2015_2024))
+```
+
+## Recode and relevel (dictionary)
+
+```{r}
+data_2019 <- my_dictionary(data_2019) |>
+  dplyr::filter(
+    HV103==1, HV102 == 1, HC55 == 0, HC13 == 0, 
+    !is.na(edad_meses_minsa_cat), !is.na(dcronica), !is.na(anemia))
+```
+
+## Scaled survey weights
+
+```{r}
+data_2019 <- data_2019 |>
+  mutate(weight_scaled = weights / sum(weights, na.rm = TRUE) * n())
+```
+
+# Questionnaires 2018
+
+```{r}
+# Hogar: Caracteristicas del Generales del Hogar
+rech0_2018 <- import(here("data", "raw", "RECH0_2018.dta"))
+
+# Hogar: Caracteristicas de los Miembros del Hogar
+rech1_2018 <- import(here("data", "raw", "RECH1_2018.dta"))
+
+# Hogar: Caracteristicas de los Miembros del Hogar (Educación y Seguro de Salud)
+rech4_2018 <- import(here("data", "raw", "RECH4_2018.dta"))
+
+# Individual: Peso y talla - Anemia
+rech6_2018 <- import(here("data", "raw", "RECH6_2018.dta"))
+
+# Hogar: Caracteristicas de la Vivienda
+rech23_2018 <- import(here("data", "raw", "RECH23_2018.dta"))
+```
+
+## Join data
+
+```{r}
+data_2018 <- build_endes_data(
+  rech0_2018, rech1_2018, rech4_2018, rech6_2018, rech23_2018, 2018)
+```
+
+## Select variables
+
+```{r}
+data_2018 <- data_2018 |>
+  dplyr::select(all_of(variables_endes_2015_2024))
+```
+
+## Recode and relevel (dictionary)
+
+```{r}
+data_2018 <- my_dictionary(data_2018) |>
+  dplyr::filter(
+    HV103==1, HV102 == 1, HC55 == 0, HC13 == 0, 
+    !is.na(edad_meses_minsa_cat), !is.na(dcronica), !is.na(anemia))
+```
+
+## Scaled survey weights
+
+```{r}
+data_2018 <- data_2018 |>
+  mutate(weight_scaled = weights / sum(weights, na.rm = TRUE) * n())
+```
+
+# Questionnaires 2017
+
+```{r}
+# Hogar: Caracteristicas del Generales del Hogar
+rech0_2017 <- import(here("data", "raw", "RECH0_2017.dta"))
+
+# Hogar: Caracteristicas de los Miembros del Hogar
+rech1_2017 <- import(here("data", "raw", "RECH1_2017.dta"))
+
+# Hogar: Caracteristicas de los Miembros del Hogar (Educación y Seguro de Salud)
+rech4_2017 <- import(here("data", "raw", "RECH4_2017.dta"))
+
+# Individual: Peso y talla - Anemia
+rech6_2017 <- import(here("data", "raw", "RECH6_2017.dta"))
+
+# Hogar: Caracteristicas de la Vivienda
+rech23_2017 <- import(here("data", "raw", "RECH23_2017.dta"))
+```
+
+## Join data
+
+```{r}
+data_2017 <- build_endes_data(
+  rech0_2017, rech1_2017, rech4_2017, rech6_2017, rech23_2017, 2017)
+```
+
+## Select variables
+
+```{r}
+data_2017 <- data_2017 |>
+  dplyr::select(all_of(variables_endes_2015_2024))
+```
+
+## Recode and relevel (dictionary)
+
+```{r}
+data_2017 <- my_dictionary(data_2017) |>
+  dplyr::filter(
+    HV103==1, HV102 == 1, HC55 == 0, HC13 == 0, 
+    !is.na(edad_meses_minsa_cat), !is.na(dcronica), !is.na(anemia))
+```
+
+## Scaled survey weights
+
+```{r}
+data_2017 <- data_2017 |>
+  mutate(weight_scaled = weights / sum(weights, na.rm = TRUE) * n())
+```
+
+# Questionnaires 2016
+
+```{r}
+# Hogar: Caracteristicas del Generales del Hogar
+rech0_2016 <- import(here("data", "raw", "RECH0_2016.dta"))
+
+# Hogar: Caracteristicas de los Miembros del Hogar
+rech1_2016 <- import(here("data", "raw", "RECH1_2016.dta"))
+
+# Hogar: Caracteristicas de los Miembros del Hogar (Educación y Seguro de Salud)
+rech4_2016 <- import(here("data", "raw", "RECH4_2016.dta"))
+
+# Individual: Peso y talla - Anemia
+rech6_2016 <- import(here("data", "raw", "RECH6_2016.dta"))
+
+# Hogar: Caracteristicas de la Vivienda
+rech23_2016 <- import(here("data", "raw", "RECH23_2016.dta"))
+```
+
+## Join data
+
+```{r}
+data_2016 <- build_endes_data(
+  rech0_2016, rech1_2016, rech4_2016, rech6_2016, rech23_2016, 2016) |>
+  rename_with(~ toupper(.x), .cols = dplyr::starts_with("hv"))
+```
+
+## Select variables
+
+```{r}
+data_2016 <- data_2016 |>
+  dplyr::select(all_of(variables_endes_2015_2024))
+```
+
+## Recode and relevel (dictionary)
+
+```{r}
+data_2016 <- my_dictionary(data_2016) |>
+  dplyr::filter(
+    HV103==1, HV102 == 1, HC55 == 0, HC13 == 0, 
+    !is.na(edad_meses_minsa_cat), !is.na(dcronica), !is.na(anemia))
+```
+
+## Scaled survey weights
+
+```{r}
+data_2016 <- data_2016 |>
+  mutate(weight_scaled = weights / sum(weights, na.rm = TRUE) * n())
+```
+
+# Questionnaires 2015
+
+```{r}
+# Hogar: Caracteristicas del Generales del Hogar
+rech0_2015 <- import(here("data", "raw", "RECH0_2015.dta"))
+
+# Hogar: Caracteristicas de los Miembros del Hogar
+rech1_2015 <- import(here("data", "raw", "RECH1_2015.dta"))
+
+# Hogar: Caracteristicas de los Miembros del Hogar (Educación y Seguro de Salud)
+rech4_2015 <- import(here("data", "raw", "RECH4_2015.dta"))
+
+# Individual: Peso y talla - Anemia
+rech6_2015 <- import(here("data", "raw", "RECH6_2015.dta"))
+
+# Hogar: Caracteristicas de la Vivienda
+rech23_2015 <- import(here("data", "raw", "RECH23_2015.dta"))
+```
+
+## Join data
+
+```{r}
+data_2015 <- build_endes_data(
+  rech0_2015, rech1_2015, rech4_2015, rech6_2015, rech23_2015, 2015) |>
+  rename_with(~ toupper(.x), .cols = dplyr::starts_with("hv"))
+```
+
+## Select variables
+
+```{r}
+data_2015 <- data_2015 |>
+  dplyr::select(all_of(variables_endes_2015_2024))
+```
+
+## Recode and relevel (dictionary)
+
+```{r}
+data_2015 <- my_dictionary(data_2015) |>
+  dplyr::filter(
+    HV103 == 1, HV102 == 1, HC55 == 0, HC13 == 0,
+    !is.na(edad_meses_minsa_cat), !is.na(dcronica), !is.na(anemia))
+```
+
+## Scaled survey weights
+
+```{r}
+data_2015 <- data_2015 |>
+  mutate(weight_scaled = weights / sum(weights, na.rm = TRUE) * n())
+```
+
+# Labeling
+
+::: {style="text-align: justify"}
+Variable labels in `.dta` files are not automatically preserved when using `bind_rows()` because this function only preserves the data structures and not the original attributes of the variables. Even if the column names match, attributes such as `label`, `format.stata` or `value.labels` are lost when joining. Labels are stored as attributes of each column `(attr(data$variable, 'label'))`. Alternatively, functions from the `labelled` or `sjlabelled` package can be used. 
+::: 
+
+```{r}
+# Save the labels from the reference data.frame (ENDES 2024)
+label_backup <- sapply(data_2024, function(x) attr(x, "label"))
+```
+
+# Merge of data.frames (2015 to 2024)
+
+```{r}
+# Join by row
+data_endes_2015_2024 <- bind_rows(
+  data_2024, data_2023, data_2022, data_2021, data_2020, data_2019, data_2018,
+  data_2017, data_2016, data_2015)
+
+# Loop to assign labels to the joined data
+for (v in names(label_backup)) {
+  attr(data_endes_2015_2024[[v]], "label") <- label_backup[[v]]
+}
+```
+
+# Export data
+
+```{r}
+haven::write_dta(data_endes_2015_2024, here("data", "clean", "data_endes_2015_2024.dta"))
+```
+
+# Test
+
+```{r}
+#| eval: false
+#| include: false
+# Check for duplicates in the first database
+rech0_2024 |>
+  count(HHID, QSNUMERO) |>
+  filter(n > 1)  # ¿Hay duplicados en la primera base?
+
+# Check for duplicates in the second database
+rech1_2024 |>
+  count(HHID, QSNUMERO) |>
+  filter(n > 1)  # ¿Y en la segunda?
+```
+
+```{r}
+#| eval: false
+#| include: false
+data_2023 |>
+  dplyr::select(HC70, HC71, HC72) |>
+  summary()
+
+data_test |>
+  # dplyr::filter(year == 2015, !is.na(edad_meses_minsa_cat)) |>
+  dplyr::select(dbm) |>
+  table()
+
+data_test_2 <- data_endes_2015_2024 |> dplyr::filter(year == 2024)
+
+table(data_test_2$dcronica, data_test_2$dbm)
+
+table(data_test_2$region, data_test_2$dcronica)
+
+table(data_test_2$edad_meses_minsa_cat, data_test_2$dbm)
+
+data_2023 |>
+  select(HC70, HC71, HC72) |>
+  summarise(n = n(),
+            across(
+    everything(),
+    list(
+      Median = ~ median(.x, na.rm = TRUE),
+      IQR = ~ paste(quantile(.x, probs = c(0.25, 0.75), na.rm = TRUE), collapse = " - "),
+      Mean = ~ mean(.x, na.rm = TRUE),
+      SD = ~ sd(.x, na.rm = TRUE),
+      Max = ~ max(.x, na.rm = TRUE),
+      Min = ~ min(.x, na.rm = TRUE)
+    ),
+    .names = "{.col}_{.fn}"
+  )) |>
+  mutate(across(where(is.numeric), round, 3))
+
+design_test <- survey::svydesign(
+  id =  ~ cluster,
+  strata =  ~ estrato,
+  weights =  ~ peso,
+  data = data_2024,
+  nest = TRUE
+)
+
+table(data_2024$dbm, data_2024$HV025)
+
+round(prop.table(
+  survey::svytable(
+    ~ dcronica + residencia,
+    design_test,
+    na.rm = TRUE
+  ),
+  margin = 1
+) * 100, 2)
+```
+

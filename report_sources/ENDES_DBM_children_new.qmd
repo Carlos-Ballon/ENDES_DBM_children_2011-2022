@@ -1,0 +1,1139 @@
+---
+title: "Double burden of malnutrition in Peruvian children"
+author: "Carlos Ballon-Salcedo"
+date: "`r Sys.Date()`"
+format: docx
+editor: source
+execute:
+  warning: true
+  message: true
+  out.extra: |
+    class="img-responsive"
+    style="display:block; margin-left:auto; margin-right:auto;"
+---
+
+# Load packages
+
+```{r}
+pacman::p_load(
+  rio,
+  here,
+  tidyverse,
+  gtsummary,
+  finalfit,
+  flextable,
+  bstfun,
+  labelled,
+  janitor,
+  epiDisplay,
+  Hmisc,
+  ggthemes,
+  rfextras,
+  gridExtra,
+  ggpubr,
+  ggdist,
+  gghalves,
+  colorspace,
+  ggsci,
+  showtext,
+  extrafont,
+  patchwork,
+  scales,
+  sf,
+  survey,
+  srvyr,
+  performance,
+  broom,
+  ggrepel)
+
+source(here::here("scripts", "dictionary_factors.R"))
+source(here::here("scripts", "statistics and raincloud plots.R"))
+#rfextras::load_scripts()
+```
+
+# Import data
+
+```{r}
+# Child's data
+data_2015_2024 <- rio::import(here("data", "clean", "data_endes_2015_2024.dta"))
+
+# Shape file
+data_departamentos <- sf::st_read(
+  here(
+    "data",
+    "Shape_departamentos",
+    "DEPARTAMENTOS_inei_geogpsperu_suyopomalia.shp")
+  ) |>
+  rename(departamento = NOMBDEP)
+```
+
+# Process data
+
+## Variable selection
+
+```{r}
+#| eval: false
+# Inspect data.frame structure and variable labels
+labelled::var_label(data_2015_2024)  # List of variable labels (if available)
+Hmisc::contents(data_2015_2024)      # data.frame with variable types and missing values
+dplyr::glimpse(data_2015_2024)       # Compact structure of variable names and types
+str(data_2015_2024)                  # Detailed structure of the data.frame
+```
+
+```{r}
+# Select and clean variables
+data_dbm <- data_2015_2024 |>
+  dplyr::select(
+    edad_meses_minsa_cat, sexo_infante, sexo_jefe, region_a, region, residencia, 
+    quintil, educacion_madre, altura, dcronica, wasting, thinness, anemia, dbm, 
+    agua_tipo, agua_tratamiento, agua_disponible, HV024, weights, cluster, stratum, 
+    talla_edad_oms, peso_edad_oms, peso_talla_oms, HV024, talla_edad_oms, 
+    peso_edad_oms, peso_talla_oms, year, weight_scaled)
+```
+
+## Dictionary: Recode, relevel, and relabel variables
+
+```{r}
+data_dbm <- my_dictionary_factors(data_dbm)
+```
+
+## Exploratory Data Analysis
+
+### Categorical data
+
+```{r}
+# Select categorical variables (factors)
+categorical_vars <- data_dbm |>
+  dplyr::select(where(\(x) is.character(x) | is.factor(x)))
+```
+
+#### Stucture of categorical variables
+
+```{r}
+#| eval: false
+# Compact structure
+glimpse(categorical_vars)
+
+# Detailed structure
+str(categorical_vars)
+
+# Concise statistical description (display labels)
+describe(categorical_vars)
+```
+
+#### Missing values and complete cases
+
+```{r}
+#| eval: false
+# Count of missing values by column (vector)
+colSums(is.na(categorical_vars))
+
+# List of complete values by column
+lapply(categorical_vars, function(x)
+  sum(complete.cases(x)))
+
+# Columns without missing values (vector)
+colnames(categorical_vars)[sapply(categorical_vars, function(x)
+  all(!is.na(x)))]
+```
+
+#### Duplicate elements
+
+::: {style="text-align: justify"}
+The `duplicated()` function identifies duplicate elements, `unique()` extracts unique elements, and `dplyr::distinct()` removes duplicate rows from a data frame.
+:::
+
+```{r}
+#| eval: false
+# Count of unique elements by column
+categorical_vars |>
+  dplyr::summarise(across(everything(), n_distinct))
+
+# Detailed list of unique elements by column
+lapply(categorical_vars, function(x)
+  unique(x))
+
+# Count duplicate elements by column
+categorical_vars |>
+  dplyr::summarise(across(
+    where(\(x) is.character(x) | is.factor(x)), ~ sum(duplicated(.))))
+```
+
+#### Unweighted frequency analysis
+
+```{r}
+#| eval: false
+# Absolute frequency for categorical variables
+lapply(categorical_vars, function(x)
+  addmargins(table(x, useNA = "ifany")))
+
+# Relative frequency for categorical variables
+lapply(categorical_vars, function(x)
+  round(addmargins(prop.table(table(
+    x
+  )) * 100), 1))
+  
+# Absolute frequency for categorical variables by DBM_anemia_stunting_factor
+lapply(categorical_vars, function(x)
+  addmargins(table(
+    x, categorical_vars$DBM_anemia_stunting_factor
+  )))
+```
+
+#### Weighted frequency analysis
+
+```{r}
+#| eval: false
+# Complex survey design by stratified cluster with svydesign
+design_test <- survey::svydesign(
+  id =  ~ cluster,
+  strata =  ~ estrato,
+  weights =  ~ peso,
+  data = data_dbm,
+  nest = TRUE
+)
+
+# Unweighted frequencies
+prop.table(
+  table(
+    data_dbm$dbm,
+    data_dbm$year
+  ),
+  margin = 2
+)
+
+prop.table(
+  table(
+    design_test$variables$dbm,
+    design_test$variables$residencia
+  ),
+  margin = 1
+)
+
+# Weighted frequencies
+round(prop.table(
+  survey::svytable(
+    ~ dbm + year,
+    design_test,
+    na.rm = TRUE
+  ),
+  margin = 2
+) * 100, 2)
+```
+
+#### Descriptive analysis: Measures of frequency and proportions
+
+```{r}
+# Flextable for sexo_child_factor by DBM_anemia_stunting_factor
+categorical_vars |>
+  tabyl(area_residencia_factor, DBM_anemia_stunting_factor) |>
+  adorn_totals(where = "both") |>
+  adorn_percentages(denominator = "col") |>
+  adorn_pct_formatting() |>
+  adorn_ns(position = "front") |>
+  flextable() |>
+  autofit()
+```
+
+```{r}
+#| eval: false
+# Frecuency table for categorical variables by DBM_anemia_stunting_factor
+purrr::map(c(
+  "edad_meses_minsa_cat", "sexo_infante", "sexo_jefe", "region_a", "region", 
+  "residencia", "quintil", "educacion_madre", "altura", "agua_tipo", 
+  "agua_tratamiento", "agua_disponible", "dcronica", "anemia", "wasting", 
+  "thinness", "year", "departamento"), ~ categorical_vars |>
+  tabyl(.data[[.x]], dbm) |>
+  adorn_totals(where = "both") |>
+  adorn_percentages(denominator = "col") |>
+  adorn_pct_formatting() |>
+  adorn_ns(position = "front"))
+```
+
+### Numerical data
+
+```{r}
+# Selection of variables
+numerical_vars <- data_dbm |>
+  dplyr::select(where(\(x) is.numeric(x)), dbm)
+  # mutate(across(
+  #   c(talla_edad_oms, peso_edad_oms, peso_talla_oms),
+  #   ~ replace(.x, .x > 9990, NA)
+  # ))
+```
+
+#### Descriptive statistics: Summary statistics
+
+```{r}
+numerical_vars |> epiDisplay::summ(digits = 2, na.rm = FALSE)
+```
+
+#### Descriptive statistics: Grouped summary statistics
+
+```{r}
+numerical_vars |>
+  dplyr::group_split(dbm) |>
+  lapply(function(df)
+    summ(df, digits = 2, na.rm = TRUE))
+```
+
+#### Data visualization: Raincloud plots and grouped summary statistics
+
+::: {style="text-align: justify"}
+El test de Shapiro-Wilk evalúa la normalidad de un conjunto de datos, pero en muestras grandes su cálculo se vuelve inestable, detectando desviaciones mínimas como significativas y tiende a rechazar la normalidad incluso cuando la distribución es aproximadamente normal. En la práctica, la función `shapiro.test()` en R tiene un límite de 5,000 observaciones, ya que por encima de este umbral pierde utilidad diagnóstica. Por otro lado, el test de Anderson-Darling (`ad.test`) es más sensible a la forma de las colas de la distribución, aunque su cálculo es computacionalmente más costoso, pues requiere ordenar los datos y aplicar una suma ponderada de diferencias. En contextos con muestras masivas, la normalidad suele asumirse por el Teorema del Límite Central, salvo que existan evidencias de fuerte asimetría o colas pesadas. Como alternativa, se recomienda complementar con histogramas, raincloud plots, QQ-plots y métricas como skewness y kurtosis.
+::: 
+
+```{r fig.height=9, fig.width=9, fig.align = 'center'}
+group_stat_table_plot(numerical_vars, "talla_edad_oms", "dbm")
+```
+
+# Produce outputs
+
+## Design
+
+```{r}
+# Complex survey design by stratified clusters
+data_dbm_svy <- srvyr::as_survey_design(
+  data_dbm, # have to specify the dataset
+  ids = cluster, # cluster ids (PSU) + household ids (SSU)
+  strata = stratum, # sampling was stratified by district
+  weights = weight_scaled, # Scaled weights
+  nest = TRUE
+)
+```
+
+## Table 1: Sociodemographic characteristics of Peruvian children
+
+This is the univariate analysis
+
+### Unweighted descriptive analysis
+
+```{r}
+# Absolute frequency
+table_1a <- data_dbm_svy |>
+  tbl_svysummary(
+    include = c(
+      edad_meses_minsa_cat, sexo_infante, region_a, residencia, quintil,
+      educacion_madre, altura, agua_tipo, dcronica, anemia, dbm),
+    statistic = list(all_categorical() ~ "{n_unweighted}"),
+    digits = list(all_categorical() ~ 0),
+    missing = "no",
+    percent = "column",
+  ) |>
+  modify_header(stat_0 ~ "**N = {N_unweighted}**") |>
+  bold_labels()
+```
+
+### Weighted descriptive analysis
+
+Use the `show_header_names()` to see the column names that can be modified.
+
+```{r}
+# Weighted proportion
+table_1b <- data_dbm_svy |>
+  tbl_svysummary(
+    include = c(
+      edad_meses_minsa_cat, sexo_infante, region_a, residencia, quintil,
+      educacion_madre, altura, agua_tipo, dcronica, anemia, dbm),
+    statistic = list(all_categorical() ~ "{p}"),
+    digits = list( all_categorical() ~ 2),
+    missing = "no"
+  ) |>
+  add_ci(
+    method = list(all_categorical() ~ "svyprop.logit"), 
+    statistic = list(all_categorical() ~ "{conf.low} - {conf.high}"),
+    conf.level = 0.95,
+    style_fun = list(all_categorical() ~ purrr::partial(style_percent, digits = 2))
+  ) |>
+  bold_labels()
+
+# Merge tables
+table_1 <- tbl_merge(
+  tbls = list(table_1a, table_1b),
+  tab_spanner = c("**Absolute frequency**", "**Weighted proportion**")) |>
+  modify_caption("**Table 1.** Sociodemographic characteristics of Peruvian children") |>
+  modify_footnote(
+    stat_0_1 ~ "Unweighted count",
+    stat_0_2 ~ "Weighted percentage")
+
+# View
+table_1
+```
+
+### Confirm with `dplyr` package
+
+```{r}
+#| eval: false
+data_dbm |>
+  dplyr::select(
+    edad_meses_minsa_cat, sexo_infante, region_a, residencia, quintil,
+    educacion_madre, altura, agua_tipo, dcronica, anemia, dbm, weights
+  ) |>
+  pivot_longer(
+    cols = c(edad_meses_minsa_cat:dbm),
+    names_to = "Variable",
+    values_to = "Valor"
+  ) |>
+  dplyr::group_by(Variable, Valor) |>
+  dplyr::filter(!is.na(Valor)) |>
+  dplyr::summarise(n = n(), weighted_prop = sum(weights)) |>
+  mutate(weighted_prop = round(weighted_prop / sum(weighted_prop) * 100, 2))
+```
+
+## Table 2: Sociodemographic characteristics of Peruvian children by DBM status
+
+This is the bivariate analysis
+
+::: {style="text-align: justify"}
+Chi-squared test with Rao & Scott’s second-order correction and Holm-Bonferroni method to adjust for multiple tests. Use (García-Pérez 2023) to understand the goodness of fit.
+:::
+
+### Weighted bivariate analysis
+
+```{r}
+table_2 <- data_dbm_svy |>
+  dplyr::filter(!is.na(DBM_anemia_stunting_factor)) |>
+  tbl_svysummary(
+    percent = "column", 
+    by = DBM_anemia_stunting_factor,
+    include = c(
+      area_residencia_factor,
+      sexo_child_factor,
+      education_factor,
+      edad_meses_cat_factor
+      ),
+    type = all_categorical() ~ "categorical",
+    statistic = all_categorical() ~ "{n} ({p})",
+    digits = all_categorical() ~ c(0, 2),
+    missing = "no"
+  ) |>
+  add_ci(
+    method = all_categorical() ~ "svyprop.logit",  
+    statistic = all_categorical() ~ "{conf.low} - {conf.high}",
+    conf.level = 0.95,
+    style_fun = list(
+      all_categorical() ~ purrr::partial(style_percent, digits = 2))
+   ) |>
+  add_p(pvalue_fun = ~style_pvalue(.x, digits = 3)) |>
+  bold_labels() |>
+  bold_p(t = 0.05) |>
+  modify_caption(
+    "Table 2. Sociodemographic characteristics of Peruvian children by double burden of malnutrition status"
+  )
+
+# View
+table_2
+```
+
+### Confirm with `dplyr` package
+
+```{r}
+#| eval: false
+# By row
+data_dbm |>
+  dplyr::select(
+    area_residencia_factor,
+    sexo_child_factor,
+    education_factor,
+    edad_meses_cat_factor,
+    DBM_anemia_stunting_factor,
+    pesos
+  ) |>
+  dplyr::filter(!is.na(DBM_anemia_stunting_factor)) |>
+  tidyr::pivot_longer(
+    cols = c(area_residencia_factor:edad_meses_cat_factor),
+    names_to = "Variable",
+    values_to = "Valor"
+  ) |>
+  dplyr::group_by(Variable, Valor, DBM_anemia_stunting_factor) |>
+  dplyr::summarise(n = n(), weighted_prop = sum(pesos), .groups = "drop_last") |>
+  mutate(weighted_prop = round(weighted_prop / sum(weighted_prop) * 100, 2)) |>
+  ungroup()
+
+# By column
+data_dbm |>
+  dplyr::select(
+    area_residencia_factor,
+    sexo_child_factor,
+    education_factor,
+    edad_meses_cat_factor,
+    DBM_anemia_stunting_factor,
+    pesos
+  ) |>
+  dplyr::filter(!is.na(DBM_anemia_stunting_factor)) |>
+  tidyr::pivot_longer(
+    cols = c(area_residencia_factor:edad_meses_cat_factor),
+    names_to = "Variable",
+    values_to = "Valor"
+  ) |>
+  dplyr::group_by(DBM_anemia_stunting_factor, Variable, Valor) |>
+  dplyr::summarise(n = n(), weighted_prop = sum(pesos), .groups = "drop_last") |>
+  dplyr::mutate(weighted_prop = round(weighted_prop / sum(weighted_prop) * 100, 2)) |>
+  ungroup()
+```
+
+## Table 3: Binomial logistic regression analysis
+
+::: {style="text-align: justify"}
+Let's use the `svyglm()` function from the `survey` package to fit a generalised linear model to data obtained from a complex survey design, incorporating inverse-probability weighting and design-based standard errors that account for stratification, clustering, and sample weights. This function returns *model-robust* standard errors. Specifically, these are Horvitz–Thompson-type standard errors, which are a generalisation of the `sandwich` estimators used in robust regression. In particular, a quasi-Poisson svyglm will return correct standard errors for relative risk regression models. This is a common approach in epidemiological studies to account for the complex survey design, including stratification, clustering, and sample weights.
+:::
+
+### Unadjusted analysis
+
+```{r}
+# Univariate regression models
+table_3a <- data_dbm_svy |>
+  gtsummary::tbl_uvregression(
+    method = survey::svyglm,
+    method.args = list(family = quasipoisson(link = "log")),
+    y = DBM_anemia_stunting, # Tener cuidado
+    include = c(
+      area_residencia_factor,
+      sexo_child_factor,
+      education_factor,
+      edad_meses_cat_factor
+    ),
+    hide_n = TRUE,
+    exponentiate = TRUE,
+    conf.int = TRUE,
+    conf.level = 0.95,
+    pvalue_fun = label_style_pvalue(digits = 1),
+    estimate_fun = ~ style_number(.x, digits = 2)
+  ) |>
+  bold_labels()
+```
+
+### Adjusted analysis
+
+```{r}
+# Multivariable analysis
+table_3b <- 
+  survey::svyglm(
+    DBM_anemia_stunting ~ 
+      area_residencia_factor +
+      sexo_child_factor +
+      education_factor +
+      edad_meses_cat_factor,
+    design = data_dbm_svy,
+    family = quasipoisson(link = "log")) |>
+  tbl_regression(
+    exponentiate = TRUE, 
+    conf.int = TRUE,
+    conf.level = 0.95,
+    tidy_fun = broom.helpers::tidy_parameters,
+    pvalue_fun = label_style_pvalue(digits = 1),
+    estimate_fun = ~ style_number(.x, digits = 2)
+  ) |>
+  add_vif() |>
+  bold_labels() |>
+  bold_p(t = 0.05)
+
+# Merge tables
+table_3 <- tbl_merge(
+  tbls = list(table_3a, table_3b),
+  tab_spanner = c("**Unadjusted Analysis**", "**Adjusted Analysis**"))
+
+# View
+table_3
+```
+
+### Logistic Regression Assumptions and Diagnostics
+
+```{r}
+data_na <- data_dbm |>
+  dplyr::select(
+    DBM_anemia_stunting,
+    area_residencia_factor,
+    sexo_child_factor,
+    education_factor,
+    edad_meses_cat_factor
+  ) |>
+  drop_na()
+
+model_1 <- glm(
+  DBM_anemia_stunting ~
+    area_residencia_factor +
+    sexo_child_factor +
+    education_factor +
+    edad_meses_cat_factor,
+  data = data_na,
+  family = binomial(link = "log")
+)
+
+model_2 <- glm(
+  DBM_anemia_stunting ~
+    area_residencia_factor,
+  data = data_na,
+  family = binomial(link = "log")
+)
+
+model_3 <- glm(
+  DBM_anemia_stunting ~
+    sexo_child_factor,
+  data = data_na,
+  family = binomial(link = "log")
+)
+
+model_4 <- glm(
+  DBM_anemia_stunting ~
+    education_factor,
+  data = data_na,
+  family = binomial(link = "log")
+)
+
+model_5 <- glm(
+  DBM_anemia_stunting ~
+    edad_meses_cat_factor,
+  data = data_na,
+  family = binomial(link = "log")
+)
+
+model_interaction_1 <- glm(
+  DBM_anemia_stunting ~
+    sexo_child_factor*area_residencia_factor +
+    education_factor +
+    edad_meses_cat_factor,
+  data = data_na,
+  family = binomial(link = "log")
+)
+
+model_interaction_2 <- glm(
+  DBM_anemia_stunting ~
+    sexo_child_factor*education_factor + 
+    area_residencia_factor +
+    edad_meses_cat_factor,
+  data = data_na,
+  family = binomial(link = "log")
+)
+
+model_interaction_3 <- glm(
+  DBM_anemia_stunting ~
+    area_residencia_factor +
+    education_factor +
+    sexo_child_factor*edad_meses_cat_factor,
+  data = data_na,
+  family = binomial(link = "log")
+)
+
+summary(model_2)
+
+tidy(model_1, conf.int = TRUE, exponentiate = TRUE)
+
+tidy(model_3, conf.int = TRUE, exponentiate = TRUE)
+
+tidy(model_interaction_1, conf.int = TRUE, exponentiate = TRUE)
+
+tidy(model_interaction_2, conf.int = TRUE, exponentiate = TRUE)
+
+tidy(model_interaction_3, conf.int = TRUE, exponentiate = TRUE)
+
+check_autocorrelation(model_1)
+
+check_model(model_1, check = c("linearity", "homogeneity"), residual_type = "normal")
+
+plot(model_1$residuals)
+
+test_likelihoodratio(model_1, model_2)
+
+test_likelihoodratio(model_1, model_3)
+
+test_likelihoodratio(model_1, model_4)
+
+test_likelihoodratio(model_1, model_5)
+
+test_likelihoodratio(model_1, model_interaction_1)
+
+m <- check_collinearity(model_interaction_1)
+
+plot(m)
+
+check_collinearity(model_1)
+
+check_collinearity(model_interaction_1)
+
+check_collinearity(model_interaction_2)
+
+check_collinearity(model_interaction_3)
+```
+
+## Figure 1: Prevalence with `tableGrob` and `ggplot2`
+
+### Table with `srvyr` and `dplyr`
+
+```{r}
+# Prevalence by year
+tabla_total <- data_dbm_svy |>
+  dplyr::group_by(year) |>
+  dplyr::summarise(
+    prevalencia = srvyr::survey_mean(
+      DBM_anemia_stunting_factor == "Si",
+      vartype = NULL,
+      na.rm = TRUE
+    )
+  ) |>
+  mutate(area = "Total", prevalencia = round(prevalencia * 100, 1)) |>
+  dplyr::select(year, area, prevalencia)
+
+# Prevalence by year and area
+tabla_area <- data_dbm_svy |>
+  dplyr::group_by(year, area_residencia_factor) |>
+  dplyr::summarise(
+    prevalencia = srvyr::survey_mean(
+      DBM_anemia_stunting_factor == "Si",
+      vartype = NULL,
+      na.rm = TRUE
+    )
+  ) |>
+  mutate(area = area_residencia_factor, prevalencia = round(prevalencia * 100, 1)) |>
+  dplyr::select(year, area, prevalencia)
+
+# Combine tables for Figure 1
+tabla_area_total <- bind_rows(tabla_area, tabla_total) |>
+  mutate(area = factor(area, levels = c("Total", "Rural", "Urbano")))
+
+# Wide format for Table 1
+tabla_merge <- tabla_area_total |>
+  dplyr::select(prevalencia, Area = area, year) |>
+  tidyr::pivot_wider(names_from = year, values_from = prevalencia)
+
+# View
+grid.table(
+  tabla_merge,
+  theme = ttheme_minimal(
+    core = list(fg_params = list(fontface = "plain", hjust = 0.5)),
+    colhead = list(fg_params = list(fontface = "bold", col = "gray20"))
+  )
+)
+```
+
+```{r}
+# Generate grob table without header rows/columns
+tabla_grob <- tableGrob(tabla_merge, theme = ttheme_minimal(), rows = NULL, cols = NULL) 
+
+# Set widths/heights to 'fill whatever space I have'
+tabla_grob$widths <- unit(rep(1, ncol(tabla_merge)), "null")
+tabla_grob$heights <- unit(rep(1, nrow(tabla_merge)), "null")
+
+# Add vertical lines
+tabla_grob <- tab_add_vline(
+  tabla_grob,
+  at.column = 1:tab_ncol(tabla_grob),
+  column.side = "left",
+  from.row = 1,
+  to.row = tab_nrow(tabla_grob),
+  linetype = 2, # dash
+  linewidth = 1,
+  linecolor = "gray30"
+)
+
+# Format table as plot
+tabla_plot <- ggplot() +
+  annotation_custom(tabla_grob) +
+  theme(
+    plot.margin = margin(t = 0, b = 0, r = 15, l = 0),
+    plot.background = element_rect(fill = "transparent", color = NA),
+    panel.background = element_rect(fill = "transparent", color = NA))
+```
+
+### Figure
+
+```{r}
+#| fig-height: 5
+#| fig-width: 10
+F1 <- ggplot(
+  data = tabla_area_total,
+  aes(
+    x = year,
+    y = prevalencia,
+    group = area, 
+    colour = area, 
+    linetype = area)) +
+  geom_line(linewidth = 1.2) +
+  geom_point(size = 2) +
+  labs(y = "Prevalencia de DCMI (%)") +
+  scale_y_continuous(limits = c(0, 25), breaks = seq(0, 100, by = 5)) +
+  ggthemes::theme_clean() +
+  ggsci::scale_color_jama() +
+  scale_linetype_manual(
+    values = c("Total" = "solid", "Rural" = "dashed", "Urbano" = "dashed")) +
+  theme(
+    legend.position = "top",
+    legend.title = element_blank(),
+    legend.text = element_text(size = 12, color = "black", family = "Arial"),
+    legend.background = element_blank(),
+    axis.title.x = element_blank(),
+    axis.text = element_text(size = 12, color = "black", family = "Arial"),
+    axis.title = element_text(size = 12, colour = "black", family = "Arial"),
+    axis.text.y = element_text(margin = margin(l = 10)))
+
+# View
+F1
+```
+
+### `grid.arrange` figure and table
+
+```{r}
+#| fig-height: 7
+#| fig-width: 10
+F1_adjusted <- F1 +
+  theme(
+    plot.margin = margin(t = 10, b = 15, l = 2, r = 15),
+    axis.title.y = element_text(
+      margin = margin(r = 10, l = 5, t = 0, b = 0)
+    ),
+    plot.background = element_rect(fill = "transparent", color = NA),
+    panel.background = element_rect(fill = "transparent", color = NA)
+  )
+
+# View the combination
+F1_final <- grid.arrange(F1_adjusted, tabla_plot, ncol = 1, heights = c(3, 0.5))
+```
+
+### `patchwork` figure and table
+
+```{r}
+#| eval: false
+#| fig-height: 7
+#| fig-width: 10
+# Table without area
+tabla_merge_patch <- tabla_merge |>
+  dplyr::select(-Area)
+
+# Grob table without header
+tabla_grob_patch <- tableGrob(tabla_merge_patch, rows = NULL, cols = NULL)
+tabla_grob_patch$widths <- unit(rep(1, ncol(tabla_grob_patch)), "null")
+tabla_grob_patch$heights <- unit(rep(1, nrow(tabla_grob_patch)), "null")
+
+# Table as empty plot to combine
+tabla_grob_patch <- ggplot() +
+  annotation_custom(tabla_grob_patch) +
+  theme_minimal() +
+  theme(
+    plot.margin = margin(t = -15, b = 0)
+  )
+
+# Figura principal debe tener margen inferior
+F1_adjusted <- F1 +
+  theme(
+    plot.margin = margin(t = 10, b = 5, l = 10, r = 10),
+    axis.title.y = element_text(
+      margin = margin(r = 10, l = 5) 
+    )
+  )
+
+# View the combination
+(F1_adjusted / tabla_grob_patch) +
+  plot_layout(heights = c(3, 0.5)) &
+  theme(
+    plot.background = element_rect(fill = "transparent", color = NA),
+    panel.background = element_rect(fill = "transparent", color = NA)
+  )
+```
+
+
+
+
+### Confirm with `survey` package
+
+```{r}
+#| eval: false
+# Prevalence by year and area
+survey::svyby(
+  ~ DBM_anemia_stunting_factor,
+  ~ year + area_residencia_factor,
+  design = data_dbm_svy,
+  svymean,
+  na.rm = TRUE) |>
+  as_tibble() |>
+  mutate(
+    area = area_residencia_factor,
+    prevalencia = DBM_anemia_stunting_factorSi * 100) |>
+  dplyr::select(year, area, prevalencia)
+
+# Prevalence by year
+survey::svyby(
+  ~ DBM_anemia_stunting_factor,
+  ~ year,
+  design = data_dbm_svy,
+  svymean,
+  na.rm = TRUE) |>
+  as_tibble() |>
+  mutate(
+    area = "Total",
+    prevalencia = DBM_anemia_stunting_factorSi * 100) |>
+  dplyr::select(year, area, prevalencia)
+```
+
+### Confirm with `dplyr` package
+
+```{r}
+#| eval: false
+# Prevalence by year
+tabla_total <- data_dbm |>
+  dplyr::select(area_residencia_factor, DBM_anemia_stunting_factor, year, pesos) |>
+  dplyr::filter(!is.na(DBM_anemia_stunting_factor)) |>
+  tidyr::pivot_longer(
+    cols = c(DBM_anemia_stunting_factor),
+    names_to = "Variable",
+    values_to = "Valor"
+  ) |>
+  dplyr::group_by(year, Variable, Valor) |>
+  dplyr::summarise(
+    n = n(),
+    weighted_prop = sum(pesos),
+    .groups = "drop_last") |>
+  mutate(
+    weighted_prop = round(weighted_prop / sum(weighted_prop) * 100, 1),
+    n_weighted_prop = stringr::str_glue("{n} ({weighted_prop})")
+  ) |>
+  dplyr::ungroup() |>
+  dplyr::filter(Valor == "Si")
+
+# Wide format
+tabla_total <- tabla_total |>
+  dplyr::select(n_weighted_prop, Area = Valor, year) |>
+  tidyr::pivot_wider(names_from = year, values_from = n_weighted_prop)
+
+# Prevalence by year and area
+tabla_area <- data_dbm |>
+  dplyr::select(area_residencia_factor, DBM_anemia_stunting_factor, year, pesos) |>
+  dplyr::filter(!is.na(DBM_anemia_stunting_factor)) |>
+  tidyr::pivot_longer(
+    cols = c(area_residencia_factor),
+    names_to = "Variable",
+    values_to = "Valor"
+  ) |>
+  dplyr::group_by(year, Variable, Valor, DBM_anemia_stunting_factor) |>
+  dplyr::summarise(
+    n = n(),
+    weighted_prop = sum(pesos),
+    .groups = "drop_last") |>
+  mutate(
+    weighted_prop = round(weighted_prop / sum(weighted_prop) * 100, 1),
+    n_weighted_prop = stringr::str_glue("{n} ({weighted_prop})")
+  ) |>
+  dplyr::ungroup() |>
+  dplyr::filter(DBM_anemia_stunting_factor == "Si")
+
+# Wide format
+tabla_area <- tabla_area |>
+  dplyr::select(n_weighted_prop, Area = Valor, year) |>
+  tidyr::pivot_wider(names_from = year, values_from = n_weighted_prop)
+
+# Combine tables for Figure 1
+bind_rows(tabla_area, tabla_total) |>
+  dplyr::mutate(Area = recode(Area, "Si" = "Total"))
+```
+
+## Figure 2
+
+```{r}
+#| fig-height: 18
+#| fig-width: 18
+data_dbm_svy_rural = data_dbm_svy |>
+  filter(area_residencia_factor == "Rural")
+  
+  
+tabla_area <- survey::svyby(
+  ~ DBM_anemia_stunting_factor,
+  ~ year + region_factor,
+  design = data_dbm_svy_rural,
+  svymean,
+  na.rm = TRUE) |>
+  as_tibble() |>
+  mutate(
+    prevalencia = round(DBM_anemia_stunting_factorSi * 100, 2)) |>
+  dplyr::select(year, region_factor, prevalencia)
+
+
+# By row
+data_region_rural <- data_dbm |>
+  dplyr::filter(!is.na(DBM_anemia_stunting_factor), area_residencia_factor == "Rural") |>
+  dplyr::select(region_factor, DBM_anemia_stunting_factor, year, pesos) |>
+  tidyr::pivot_longer(
+    cols = c(region_factor),
+    names_to = "Variable",
+    values_to = "Valor"
+  ) |>
+  dplyr::group_by(year, Variable, Valor, DBM_anemia_stunting_factor) |>
+  dplyr::summarise(
+    n = n(), 
+    weighted_prop = sum(pesos), 
+    .groups = "drop_last") |>
+  mutate(weighted_prop = round(weighted_prop / sum(weighted_prop) * 100, 2)) |>
+  ungroup() |>
+  tidyr::complete(
+    year, Valor, DBM_anemia_stunting_factor, Variable,
+    fill = list(weighted_prop = 0, n = 0)
+    ) |>
+  filter(DBM_anemia_stunting_factor == "Si") |>
+  rename(departamento = Valor, prevalencia = weighted_prop)
+
+diferencia_region_rural <- data_region_rural |>
+  mutate(prevalencia = replace_na(prevalencia, 0)) |>
+  dplyr::group_by(departamento) |>
+  summarise(
+    prevalencia_2022 = sum(prevalencia[year == 2011]),
+    prevalencia_2011 = sum(prevalencia[year == 2022]),
+    diferencia = prevalencia_2011 - prevalencia_2022
+  )
+```
+
+
+```{r}
+data_dbm_svy_urbano = data_dbm_svy |>
+  filter(area_residencia_factor == "Urbano")
+  
+  
+tabla_area <- survey::svyby(
+  ~ DBM_anemia_stunting_factor,
+  ~ year + region_factor,
+  design = data_dbm_svy_urbano,
+  svymean,
+  na.rm = TRUE) |>
+  as_tibble() |>
+  mutate(
+    prevalencia = round(DBM_anemia_stunting_factorSi * 100, 2)) |>
+  dplyr::select(year, region_factor, prevalencia)
+
+
+# By row
+data_region_urbano <- data_dbm |>
+  dplyr::filter(!is.na(DBM_anemia_stunting_factor), area_residencia_factor == "Urbano") |>
+  dplyr::select(region_factor, DBM_anemia_stunting_factor, year, pesos) |>
+  tidyr::pivot_longer(
+    cols = c(region_factor),
+    names_to = "Variable",
+    values_to = "Valor"
+  ) |>
+  dplyr::group_by(year, Variable, Valor, DBM_anemia_stunting_factor) |>
+  dplyr::summarise(
+    n = n(), 
+    weighted_prop = sum(pesos), 
+    .groups = "drop_last") |>
+  mutate(weighted_prop = round(weighted_prop / sum(weighted_prop) * 100, 2)) |>
+  ungroup() |>
+  tidyr::complete(
+    year, Valor, DBM_anemia_stunting_factor, Variable,
+    fill = list(weighted_prop = 0, n = 0)
+    ) |>
+  rename(departamento = Valor, prevalencia = weighted_prop)
+
+diferencia_region_urbano <- data_region_urbano |>
+  dplyr::group_by(departamento) |>
+  summarise(
+    prevalencia_2022 = sum(prevalencia[year == 2022]),
+    prevalencia_2011 = sum(prevalencia[year == 2011]),
+    diferencia = prevalencia_2011 - prevalencia_2022
+  )
+```
+
+
+```{r}
+tabla_area <- survey::svyby(
+  ~ DBM_anemia_stunting_factor,
+  ~ year + region_factor,
+  design = data_dbm_svy,
+  svymean,
+  na.rm = TRUE) |>
+  as_tibble() |>
+  mutate(
+    prevalencia = round(DBM_anemia_stunting_factorSi * 100, 2)) |>
+  dplyr::select(year, region_factor, prevalencia)
+
+
+# By row
+data_region <- data_dbm |>
+  dplyr::filter(!is.na(DBM_anemia_stunting_factor)) |>
+  dplyr::select(
+    region_factor,
+    DBM_anemia_stunting_factor,
+    year,
+    pesos
+  ) |>
+  tidyr::pivot_longer(
+    cols = c(region_factor),
+    names_to = "Variable",
+    values_to = "Valor"
+  ) |>
+  dplyr::group_by(year, Variable, Valor, DBM_anemia_stunting_factor) |>
+  dplyr::summarise(n = n(), weighted_prop = sum(pesos), .groups = "drop_last") |>
+  mutate(weighted_prop = round(weighted_prop / sum(weighted_prop) * 100, 2)) |>
+  ungroup() |>
+  dplyr::filter(DBM_anemia_stunting_factor == "Si") |>
+  rename(departamento = Valor, prevalencia = weighted_prop)
+
+diferencia_region <- data_region |>
+  dplyr::group_by(departamento) |>
+  summarise(
+    prevalencia_2022 = sum(prevalencia[year == 2011]),
+    prevalencia_2011 = sum(prevalencia[year == 2022]),
+    diferencia = prevalencia_2011 - prevalencia_2022
+  )
+```
+
+
+
+# Save outputs
+
+```{r}
+# Save figure 1 (PNG)
+ggsave(
+  F1, 
+  filename = here("outputs", "prevalence_plot.png"), 
+  width = 10, 
+  height = 7, 
+  dpi = 300)
+
+# Save figure 1 (JPEG)
+ggsave(
+  F2, 
+  filename = here("outputs", "prevalence_plot.jpeg"), 
+  width = 10,
+  height = 7,
+  dpi = 300)
+```
+
+```{r}
+paleta_rosa <- c("#fde0dd", "#fbb4b9", "#f768a1", "#c51b8a", "#7a0177")
+```
+
+```{r}
+# intervalos de confianza como áreas sombreadas
+ggplot(tabla_dbm, aes(x = year, y = prevalencia, color = area)) +
+  geom_ribbon(
+    aes(ymin = lower, ymax = upper, fill = area),
+    alpha = 0.2,
+    colour = NA
+  ) +
+  geom_line(aes(group = area), linewidth = 1.5) +
+  geom_point(aes(shape = area), size = 4) +
+  geom_text_repel(
+    aes(label = round(prevalencia, 1)),
+    size = 3.5,
+    box.padding = 0.7,
+    family = "Syne"
+  ) +
+  scale_y_continuous(breaks = seq(0, 15, by = 3)) +
+  labs(color = "Área de residencia", shape = "Área", fill = "Área de residencia") +
+  ggsci::scale_color_bmj() +
+  ggsci::scale_fill_bmj() +
+  theme_minimal(base_size = 14, base_family = "Syne") +
+  theme(
+    axis.title = element_blank(),
+    legend.position = "bottom",
+    text = element_text(color = "black"),
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_line(color = "#d0d0d0", linetype = "dashed"),
+    panel.background = element_rect(fill = "white"),
+    plot.background = element_rect(fill = "white"),
+    axis.line.x.bottom = element_line(color = "black"),
+    axis.line.y.left = element_line(color = "black"),
+    axis.text.y.right = element_blank(),
+    axis.ticks.y.right = element_blank(),
+    axis.line.y.right = element_blank()
+  )
+
+
+```
+
