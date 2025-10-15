@@ -236,7 +236,9 @@ group_stat_table_plot <- function(data_used, var, outcome) {
       axis.text.y = element_text(
         color = darken(c("#a86826", "#3d6721"), 0.1, space = "HLS"), 
         size = 14,
-        margin = margin(l = 20)),
+        angle = 90,
+        margin = margin(l = 20),
+        hjust = -0.1),
       plot.title = element_text(color = "#272822", size = 18, face = "bold"),
       plot.subtitle = element_text(
         size = 12, 
