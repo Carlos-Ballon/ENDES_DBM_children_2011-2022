@@ -45,15 +45,15 @@ pacman::p_load(
   performance,
   broom)
 
-#source(here::here("scripts", "dictionary.R"))
-rfextras::load_scripts()
+source(here::here("scripts", "dictionary.R"))
+#rfextras::load_scripts()
 ```
 
 # Import data
 
 ```{r}
 # Child's data
-data_ninios <- rio::import(here("data", "ninios-2011-2022_tmp.dta"))
+data_ninios <- rio::import(here("data", "clean", "ninios-2011-2022_tmp.dta"))
 
 # Shape file
 data_departamentos <- sf::st_read(
@@ -904,8 +904,6 @@ tabla_plot <- ggplot() +
 
 
 # Figure 1: Prevalence of DCMI by year and area
-
-
 F1 <- ggplot(
   data = tabla_area_total,
   aes(
@@ -934,7 +932,9 @@ F1 <- ggplot(
 
 # View
 F1
+```
 
+```{r}
 #| fig-height: 7
 #| fig-width: 10
 tabla_grob <- tableGrob(tabla_merge, theme = ttheme_minimal(), rows = NULL, cols = NULL)
@@ -1165,8 +1165,8 @@ diferencia_region <- data_region |>
 ```{r}
 # Save figure 1 (PNG)
 ggsave(
-  F1, 
-  filename = here("outputs", "prevalence_plot.png"), 
+  a, 
+  filename = here("outputs", "prevalence_plot_alt.png"), 
   width = 10, 
   height = 7, 
   dpi = 300)
